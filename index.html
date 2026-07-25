@@ -179,6 +179,71 @@
   .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 
   .confetti{position:fixed;width:10px;height:14px;top:-20px;z-index:80;pointer-events:none;border-radius:2px}
+
+  /* ---------- Badges ---------- */
+  .badgebox{margin-top:18px;background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:16px}
+  .badgebox-t{font-size:14px;font-weight:800;margin-bottom:12px}
+  .badgebox-t span{color:var(--muted);font-weight:600;font-size:12px}
+  .badgegrid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+  @media(max-width:420px){.badgegrid{grid-template-columns:repeat(4,1fr);gap:7px}}
+  .badge-i{text-align:center;padding:10px 4px;border-radius:12px;background:var(--panel2);border:1px solid var(--line);transition:.2s}
+  .badge-i.got{background:linear-gradient(160deg,#2a2410,#1c2416);border-color:#4a4020}
+  .badge-i .bi-em{font-size:24px;filter:grayscale(1) opacity(.35)}
+  .badge-i.got .bi-em{filter:none;animation:pop .4s}
+  @keyframes pop{0%{transform:scale(.3)}70%{transform:scale(1.2)}100%{transform:scale(1)}}
+  .badge-i .bi-n{font-size:10px;color:var(--muted);margin-top:5px;font-weight:700;line-height:1.2}
+  .badge-i.got .bi-n{color:var(--gold)}
+
+  /* ---------- Numbers ---------- */
+  .numintro{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:20px 18px;text-align:center;box-shadow:var(--shadow)}
+  .numintro p{color:var(--muted);font-size:14px;margin:0 0 16px}
+  .agerow{display:flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap}
+  .ageinput{width:110px;padding:14px;font-size:22px;text-align:center;border-radius:13px;border:2px solid var(--line);background:var(--panel2);color:var(--ink);font-weight:900;outline:none}
+  .ageinput:focus{border-color:var(--green)}
+  .numresults{display:grid;gap:12px;margin-top:16px}
+  .numstat{background:linear-gradient(160deg,var(--panel2),var(--panel));border:1px solid var(--line);border-radius:16px;padding:16px;display:flex;align-items:center;gap:14px;animation:fade .4s}
+  .numstat .nem{font-size:32px;flex:0 0 auto}
+  .numstat .nbody{flex:1;min-width:0}
+  .numstat .nlab{font-size:13px;color:var(--muted);font-weight:700}
+  .numstat .nval{font-size:24px;font-weight:900;color:var(--green);line-height:1.1;margin:2px 0}
+  .numstat .ncap{font-size:11px;color:var(--dim)}
+
+  /* ---------- True/False ---------- */
+  .tfcard{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:22px 18px;box-shadow:var(--shadow);text-align:center;min-height:180px;display:flex;flex-direction:column;justify-content:center}
+  .tfclaim{font-size:20px;font-weight:800;line-height:1.5;margin:4px 0 6px}
+  .tfquote{font-size:34px;color:var(--line);line-height:0;height:14px}
+  .tfbtns{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:20px}
+  .tfbtn{padding:20px;border-radius:14px;border:2px solid var(--line);background:var(--panel2);color:var(--ink);font-size:19px;font-weight:900;cursor:pointer;transition:.15s}
+  .tfbtn:active{transform:scale(.97)}
+  .tfbtn.real:hover{border-color:var(--green)}
+  .tfbtn.fake:hover{border-color:var(--red)}
+  .tfbtn.correct{border-color:var(--green);background:rgba(46,204,113,.16)}
+  .tfbtn.wrong{border-color:var(--red);background:rgba(229,72,77,.16)}
+  .tfbtn.disabled{pointer-events:none;opacity:.5}
+  .tfverdict{margin-top:8px;font-size:15px;font-weight:900}
+  .tfverdict .rr{color:var(--green)}.tfverdict .ff{color:var(--red2)}
+
+  /* ---------- Random fact ---------- */
+  .randombox{background:linear-gradient(160deg,#241017,#151b23);border:1px solid #40232a;border-radius:16px;padding:16px;margin-bottom:16px;text-align:center}
+  .randombox .rf-fact{font-size:15px;font-weight:700;color:#ffe9c2;min-height:44px;display:flex;align-items:center;justify-content:center;transition:.2s}
+  .randombtn{margin-top:10px;background:linear-gradient(90deg,var(--gold),var(--red2));border:none;color:#2a1000;font-weight:900;font-size:14px;padding:11px 18px;border-radius:12px;cursor:pointer}
+  .randombtn:active{transform:scale(.97)}
+
+  /* ---------- Quote note ---------- */
+  .quotebox{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:18px;box-shadow:var(--shadow);margin-top:16px}
+  .quotebox h3{margin:0 0 4px;font-size:16px}
+  .quotebox .qhint{font-size:12.5px;color:var(--muted);margin-bottom:12px}
+  .qinrow{display:flex;gap:8px;margin-bottom:8px}
+  .qpage{width:70px;flex:0 0 70px;padding:11px;border-radius:11px;border:1.5px solid var(--line);background:var(--panel2);color:var(--ink);font-size:14px;text-align:center;outline:none}
+  .qtext{flex:1;padding:11px;border-radius:11px;border:1.5px solid var(--line);background:var(--panel2);color:var(--ink);font-size:14px;outline:none}
+  .qpage:focus,.qtext:focus{border-color:var(--purple)}
+  .qaddbtn{background:var(--purple);border:none;color:#fff;font-weight:800;border-radius:11px;padding:0 16px;cursor:pointer;font-size:14px}
+  .qlist{display:grid;gap:9px;margin-top:6px}
+  .qitem{background:var(--panel2);border:1px solid var(--line);border-left:4px solid var(--purple);border-radius:10px;padding:11px 13px;font-size:14px;display:flex;gap:10px;align-items:flex-start}
+  .qitem .qp{font-size:11px;font-weight:800;color:var(--purple);flex:0 0 auto;background:rgba(151,117,250,.15);padding:2px 7px;border-radius:6px;margin-top:1px}
+  .qitem .qt{flex:1;color:#dfe6ef}
+  .qitem .qx{color:var(--dim);cursor:pointer;font-size:16px;flex:0 0 auto}
+  .qempty{font-size:13px;color:var(--dim);text-align:center;padding:14px}
 </style>
 </head>
 <body>
@@ -215,11 +280,27 @@
       </div>
 
       <div class="card" style="--accent:var(--blue)" onclick="go('word')">
-        <span class="badge" id="b-word">10문제</span>
+        <span class="badge" id="b-word">13문제</span>
         <div class="emoji">🔤</div>
         <h3>초성 · 빈칸</h3>
         <p>핵심 용어를 초성과 빈칸으로 맞히는 낱말 게임</p>
         <div class="bar"><i id="p-word"></i></div>
+      </div>
+
+      <div class="card" style="--accent:var(--green)" onclick="go('numbers')">
+        <span class="badge" id="b-num">계산</span>
+        <div class="emoji">🔢</div>
+        <h3>내 몸 숫자</h3>
+        <p>나이를 넣으면 내 심장이 뛴 횟수까지 계산해요</p>
+        <div class="bar"><i id="p-num"></i></div>
+      </div>
+
+      <div class="card" style="--accent:var(--gold)" onclick="go('tf')">
+        <span class="badge" id="b-tf">10주장</span>
+        <div class="emoji">🕵️</div>
+        <h3>진짜? 가짜?</h3>
+        <p>몸에 얽힌 소문의 진실을 가려내는 판별 게임</p>
+        <div class="bar"><i id="p-tf"></i></div>
       </div>
 
       <div class="card" style="--accent:var(--purple)" onclick="go('cards')">
@@ -229,6 +310,11 @@
         <p>트리비아 카드 뒤집기와 나의 느낀 점 남기기</p>
         <div class="bar"><i id="p-cards"></i></div>
       </div>
+    </div>
+
+    <div class="badgebox">
+      <div class="badgebox-t">🏅 획득한 배지 <span id="badgeCount"></span></div>
+      <div class="badgegrid" id="badgeGrid"></div>
     </div>
 
     <div class="home-foot">
@@ -278,6 +364,37 @@
     <div id="wordStage"></div>
   </div>
 
+  <!-- ===== NUMBERS ===== -->
+  <div id="numbers" class="screen">
+    <div class="topbar">
+      <button class="backbtn" onclick="go('home')">← 홈</button>
+      <h2>내 몸 숫자</h2>
+      <div class="spacer"></div>
+      <div class="pill">🔢</div>
+    </div>
+    <div class="numintro">
+      <p>책 속 놀라운 숫자를 <b style="color:var(--ink)">내 나이</b>에 대입하면?<br>내가 태어난 뒤 내 몸이 해온 일을 계산해 봐요.</p>
+      <div class="agerow">
+        <input class="ageinput" id="ageInput" type="number" min="1" max="120" placeholder="나이"
+          onkeydown="if(event.key==='Enter')calcNumbers()">
+        <span style="font-size:16px;font-weight:800">살</span>
+        <button class="btn primary" onclick="calcNumbers()">계산하기</button>
+      </div>
+    </div>
+    <div class="numresults" id="numResults"></div>
+  </div>
+
+  <!-- ===== TRUE / FALSE ===== -->
+  <div id="tf" class="screen">
+    <div class="topbar">
+      <button class="backbtn" onclick="go('home')">← 홈</button>
+      <h2>진짜? 가짜?</h2>
+      <div class="spacer"></div>
+      <div class="pill" id="tfScore">0 / 10</div>
+    </div>
+    <div id="tfStage"></div>
+  </div>
+
   <!-- ===== CARDS + REFLECTION ===== -->
   <div id="cards" class="screen">
     <div class="topbar">
@@ -286,8 +403,24 @@
       <div class="spacer"></div>
       <div class="pill" id="cardCount">0 / 8</div>
     </div>
+    <div class="randombox">
+      <div class="rf-fact" id="rfFact">🎲 버튼을 눌러 오늘의 몸 이야기를 뽑아 보세요</div>
+      <button class="randombtn" onclick="randomFact()">🎲 놀라운 사실 뽑기</button>
+    </div>
+
     <p style="font-size:13px;color:var(--muted);margin:0 0 12px">카드를 눌러 뒤집어 보세요. 책에서 가장 놀라웠던 사실들이에요.</p>
     <div class="flipgrid" id="flipGrid"></div>
+
+    <div class="quotebox">
+      <h3>📖 인상 깊은 문장 수집함</h3>
+      <div class="qhint">읽다가 밑줄 친 문장을 쪽수와 함께 모아 두세요. 나만의 명문장 노트가 됩니다.</div>
+      <div class="qinrow">
+        <input class="qpage" id="qPage" type="number" min="1" placeholder="쪽">
+        <input class="qtext" id="qText" placeholder="기억하고 싶은 문장" onkeydown="if(event.key==='Enter')addQuote()">
+        <button class="qaddbtn" onclick="addQuote()">담기</button>
+      </div>
+      <div class="qlist" id="qList"></div>
+    </div>
 
     <div class="refl">
       <h3>✍️ 나의 독후감</h3>
@@ -430,6 +563,51 @@ const FACTS = [
   {em:"🧬", q:"내 DNA를 다 이으면 얼마나 길까?", num:"태양계 밖까지", a:"세포 하나에 든 DNA만 2m, 온몸의 것을 이으면 상상하기 힘든 길이가 됩니다."}
 ];
 
+/* 내 몸 숫자: 하루 기준 값으로 나이에 곱해 계산 */
+const NUMSTATS = [
+  {em:"💓", lab:"심장이 뛴 횟수", per:100000, unit:"번", cap:"하루 약 10만 번, 한 번도 쉬지 않고"},
+  {em:"🫁", lab:"숨을 들이쉰 횟수", per:20000, unit:"번", cap:"하루 약 2만 번씩 나도 모르게"},
+  {em:"👁️", lab:"눈을 깜빡인 횟수", per:15000, unit:"번", cap:"눈을 촉촉하게 지키려고 하루 약 1만 5천 번"},
+  {em:"💧", lab:"만들어낸 침", per:1.4, unit:"리터", cap:"하루 약 1.4리터, 소화와 방어를 도우며", big:true},
+  {em:"😴", lab:"잠으로 보낸 시간", per:8, unit:"시간", cap:"하루 8시간이면, 인생의 약 3분의 1"}
+];
+
+/* 진짜? 가짜? — 몸에 얽힌 소문 판별 */
+const TF = [
+  {claim:"사람은 평생 자기 몸무게의 수십 배에 달하는 피부를 벗고 새로 만든다.", real:true,
+   e:"진짜예요. 피부는 끊임없이 벗겨지고 새로 나며, 집먼지의 상당 부분이 그 죽은 피부 조각입니다."},
+  {claim:"우리는 평소 뇌의 10%밖에 사용하지 못한다.", real:false,
+   e:"가짜! 아주 유명한 미신이에요. 뇌는 부위마다 역할이 다를 뿐, 하루 종일 거의 전체가 활발히 일합니다."},
+  {claim:"혀에는 맛 구역이 나뉘어 있어서 단맛은 혀끝에서만 느낀다.", real:false,
+   e:"가짜! '혀 지도'는 잘못 알려진 이야기예요. 맛은 혀 전체에서 고루 느끼고, 사실 대부분은 코가 결정합니다."},
+  {claim:"천연두는 인간이 백신으로 지구에서 완전히 없앤 유일한 전염병이다.", real:true,
+   e:"진짜예요. 수억 명을 죽인 병을 인류가 몰아낸, 의학 역사상 가장 위대한 승리입니다."},
+  {claim:"손가락 관절을 자주 꺾으면 관절염에 걸린다.", real:false,
+   e:"가짜! 뚝뚝 소리는 관절 속 기포가 터지는 소리일 뿐, 관절염과의 연관은 밝혀지지 않았어요."},
+  {claim:"우리 몸의 뼈 206개 가운데 절반이 넘게 손과 발에 몰려 있다.", real:true,
+   e:"진짜예요. 정교하게 움직여야 하는 손발일수록 뼈가 잘게 나뉘어 있습니다."},
+  {claim:"면도를 하면 털이 더 굵고 검게 자란다.", real:false,
+   e:"가짜! 잘린 단면이 뭉툭해 굵어 보일 뿐, 털의 굵기나 색은 면도와 상관없습니다."},
+  {claim:"뇌 자체에는 통증을 느끼는 신경이 없어서 깨어 있는 채로 수술하기도 한다.", real:true,
+   e:"진짜예요. 온몸의 통증을 해석하는 뇌지만, 정작 자기 자신은 아픔을 느끼지 못합니다."},
+  {claim:"인간의 감각은 시각·청각·후각·미각·촉각의 다섯 가지뿐이다.", real:false,
+   e:"가짜! 균형, 온도, 통증, 몸의 위치 감각 등 우리는 다섯 개보다 훨씬 많은 감각을 씁니다."},
+  {claim:"간은 일부를 잘라내도 다시 자라날 만큼 재생력이 뛰어나다.", real:true,
+   e:"진짜예요. 500가지가 넘는 일을 하면서 스스로 재생까지 하는 놀라운 화학 공장입니다."}
+];
+
+/* 배지: 조건 함수로 판정 */
+const BADGES = [
+  {id:"first", em:"🎯", n:"첫 도전", cond:s=>s.quizBest!==null},
+  {id:"perfect", em:"💯", n:"만점왕", cond:s=>s.quizBest>=QUIZ.length*10},
+  {id:"explorer", em:"🗺️", n:"인체 탐험가", cond:s=>s.foundOrgans.length>=ORGANS.length},
+  {id:"word", em:"🔤", n:"낱말 마스터", cond:s=>s.wordSolved.length>=WORDS.length},
+  {id:"number", em:"🔢", n:"숫자 마법사", cond:s=>!!s.numbersDone},
+  {id:"detective", em:"🕵️", n:"진실 탐정", cond:s=>s.tfBest>=TF.length},
+  {id:"writer", em:"✍️", n:"작가", cond:s=>s.reflText&&s.reflText.trim().length>0},
+  {id:"collector", em:"📖", n:"문장 수집가", cond:s=>(s.quotes||[]).length>=3}
+];
+
 /* ============ STATE ============ */
 const KEY = "bodyBrysonActivity_v1";
 let S = load();
@@ -441,6 +619,10 @@ S.wordSolved = S.wordSolved ?? [];
 S.flipped = S.flipped ?? [];
 S.reflText = S.reflText ?? "";
 S.stars = S.stars ?? 0;
+S.tfBest = S.tfBest ?? 0;
+S.numbersDone = S.numbersDone ?? false;
+S.age = S.age ?? "";
+S.quotes = S.quotes ?? [];
 
 /* ============ NAV ============ */
 function go(id){
@@ -450,6 +632,8 @@ function go(id){
   if(id==='quiz') startQuiz();
   if(id==='body') buildBody();
   if(id==='word') buildWords();
+  if(id==='numbers') buildNumbers();
+  if(id==='tf') startTF();
   if(id==='cards') buildCards();
   if(id==='home') refreshHome();
 }
@@ -459,22 +643,41 @@ function refreshHome(){
   const quizDone = S.quizBest!==null;
   const bodyN = S.foundOrgans.length, bodyDone = bodyN>=ORGANS.length;
   const wordN = S.wordSolved.length, wordDone = wordN>=WORDS.length;
+  const numDone = !!S.numbersDone;
+  const tfDone = S.tfBest>=TF.length;
   const cardsDone = (S.reflText && S.reflText.trim().length>0);
 
   setBar('p-quiz', quizDone?100:0);
   setBar('p-body', bodyN/ORGANS.length*100);
   setBar('p-word', wordN/WORDS.length*100);
+  setBar('p-num', numDone?100:0);
+  setBar('p-tf', S.tfBest/TF.length*100);
   setBar('p-cards', cardsDone?100:(S.flipped.length/FACTS.length*100));
 
   badge('b-quiz', quizDone?`최고 ${S.quizBest}점`:`${QUIZ.length}문항`, quizDone);
   badge('b-body', bodyDone?'완료!':`${bodyN}/${ORGANS.length}`, bodyDone);
   badge('b-word', wordDone?'완료!':`${wordN}/${WORDS.length}`, wordDone);
+  badge('b-num', numDone?'계산함':'계산', numDone);
+  badge('b-tf', tfDone?'완료!':(S.tfBest>0?`최고 ${S.tfBest}`:`${TF.length}주장`), tfDone);
   badge('b-cards', cardsDone?'작성됨':'기록', cardsDone);
 
-  const done = [quizDone,bodyDone,wordDone,cardsDone].filter(Boolean).length;
-  document.getElementById('homeFill').style.width = (done/4*100)+'%';
+  const flags=[quizDone,bodyDone,wordDone,numDone,tfDone,cardsDone];
+  const done = flags.filter(Boolean).length;
+  document.getElementById('homeFill').style.width = (done/flags.length*100)+'%';
   document.getElementById('homeLab').textContent =
-    done===4 ? '🎉 네 가지 활동을 모두 마쳤어요! 훌륭해요' : `4가지 활동 중 ${done}개 완료`;
+    done===flags.length ? '🎉 모든 활동을 마쳤어요! 정말 훌륭해요' : `${flags.length}가지 활동 중 ${done}개 완료`;
+  renderBadges();
+}
+
+function renderBadges(){
+  const grid=document.getElementById('badgeGrid'); if(!grid) return;
+  const got=BADGES.filter(b=>b.cond(S)).length;
+  document.getElementById('badgeCount').textContent=`(${got} / ${BADGES.length})`;
+  grid.innerHTML=BADGES.map(b=>{
+    const on=b.cond(S);
+    return `<div class="badge-i ${on?'got':''}" title="${on?'획득':'미획득'}">
+      <div class="bi-em">${b.em}</div><div class="bi-n">${b.n}</div></div>`;
+  }).join('');
 }
 function setBar(id,pct){ const el=document.getElementById(id); if(el) el.style.width=Math.min(100,pct)+'%'; }
 function badge(id,txt,done){ const el=document.getElementById(id); if(!el)return; el.textContent=txt; el.classList.toggle('done',!!done); }
@@ -681,6 +884,7 @@ function buildCards(){
       </div>
     </div>`).join('');
   updateCardCount();
+  renderQuotes();
   // reflection restore
   document.getElementById('reflText').value=S.reflText||'';
   paintStars(S.stars||0);
@@ -711,6 +915,131 @@ function saveReflection(){
   toast('독후감을 저장했어요 💾');
 }
 
+/* ============ NUMBERS ============ */
+function fmt(n){ return Math.round(n).toLocaleString('ko-KR'); }
+function buildNumbers(){
+  document.getElementById('ageInput').value = S.age||'';
+  if(S.numbersDone && S.age) renderNumbers(S.age,false);
+  else document.getElementById('numResults').innerHTML='';
+}
+function calcNumbers(){
+  const age=parseInt(document.getElementById('ageInput').value);
+  if(!age||age<1||age>120){ toast('나이를 1~120 사이로 넣어 주세요'); return; }
+  S.age=age; S.numbersDone=true; persist();
+  renderNumbers(age,true); burst();
+}
+function renderNumbers(age,animate){
+  const days=age*365.25;
+  document.getElementById('numResults').innerHTML=NUMSTATS.map((s,i)=>`
+    <div class="numstat"><div class="nem">${s.em}</div>
+      <div class="nbody"><div class="nlab">${s.lab}</div>
+      <div class="nval" id="nv${i}">0</div><div class="ncap">${s.cap}</div></div></div>`).join('');
+  NUMSTATS.forEach((s,i)=>{
+    const target=s.years?age/3:Math.round(s.per*days);
+    const el=document.getElementById('nv'+i);
+    if(animate) countUp(el,target,s.unit,s.years);
+    else el.textContent=(s.years?target.toFixed(1):fmt(target))+' '+s.unit;
+  });
+}
+function countUp(el,target,unit,dec){
+  const dur=1100,t0=performance.now();
+  const finalTxt=(dec?target.toFixed(1):fmt(target))+' '+unit;
+  let done=false;
+  (function step(now){
+    if(done) return;
+    const p=Math.min(1,(now-t0)/dur), e=1-Math.pow(1-p,3), cur=target*e;
+    el.textContent=(dec?cur.toFixed(1):fmt(cur))+' '+unit;
+    if(p<1) requestAnimationFrame(step);
+    else { done=true; el.textContent=finalTxt; }
+  })(t0);
+  // 탭이 안 보여 rAF가 멈춰도 최종값은 반드시 표시
+  setTimeout(()=>{ if(!done){ done=true; el.textContent=finalTxt; } }, dur+150);
+}
+
+/* ============ TRUE / FALSE ============ */
+let ti=0, tscore=0;
+function startTF(){ ti=0; tscore=0; document.getElementById('tfScore').textContent=`0 / ${TF.length}`; renderTF(); }
+function renderTF(){
+  const t=TF[ti];
+  document.getElementById('tfStage').innerHTML=`
+    <div class="qmeta" style="padding:0 4px 8px;color:var(--muted);font-size:12px">
+      <span>${ti+1} / ${TF.length}</span><span>소문의 진실은?</span></div>
+    <div class="tfcard">
+      <div class="tfquote">“</div>
+      <div class="tfclaim">${t.claim}</div>
+      <div class="tfbtns">
+        <button class="tfbtn real" onclick="answerTF(true,this)">✅ 진짜</button>
+        <button class="tfbtn fake" onclick="answerTF(false,this)">❌ 가짜</button>
+      </div>
+    </div>
+    <div class="explain" id="tfExp" style="margin-top:14px"></div>
+    <button class="nextbtn" id="tfNext" onclick="nextTF()">${ti<TF.length-1?'다음 →':'결과 보기 🎉'}</button>`;
+}
+function answerTF(val,btn){
+  const t=TF[ti], correct=val===t.real;
+  const btns=document.querySelectorAll('#tfStage .tfbtn');
+  btns.forEach(b=>b.classList.add('disabled'));
+  (t.real?btns[0]:btns[1]).classList.add('correct');
+  if(!correct) btn.classList.add('wrong');
+  if(correct) tscore++;
+  document.getElementById('tfScore').textContent=`${tscore} / ${TF.length}`;
+  const exp=document.getElementById('tfExp');
+  exp.innerHTML=(correct?'<b>맞았어요! ✅ </b>':`<b>아쉬워요 — 정답은 ${t.real?'진짜':'가짜'} 💡 </b>`)+t.e;
+  exp.classList.add('show');
+  document.getElementById('tfNext').classList.add('show');
+}
+function nextTF(){ if(ti<TF.length-1){ti++;renderTF();window.scrollTo(0,0);} else tfResult(); }
+function tfResult(){
+  if(tscore>S.tfBest){ S.tfBest=tscore; persist(); }
+  const pct=tscore/TF.length*100;
+  let grade,msg;
+  if(pct>=90){grade='🕵️';msg='진실 탐정! 소문에 속지 않는 눈을 가졌네요.';}
+  else if(pct>=60){grade='🔍';msg='좋아요. 몇 가지 미신만 더 기억하면 완벽!';}
+  else{grade='🤔';msg='괜찮아요. 해설을 보고 다시 도전해 봐요.';}
+  if(pct>=80) burst();
+  document.getElementById('tfStage').innerHTML=`
+    <div class="result">
+      <div class="grade">${grade}</div>
+      <div class="big">${tscore}<span style="font-size:20px;color:var(--muted)">/${TF.length}</span></div>
+      <div class="msg">${msg}<br><span style="font-size:12px">최고 기록 ${S.tfBest} / ${TF.length}</span></div>
+      <div class="row">
+        <button class="btn" onclick="go('home')">홈으로</button>
+        <button class="btn primary" onclick="startTF()">다시 도전</button>
+      </div></div>`;
+}
+
+/* ============ RANDOM FACT ============ */
+let lastRF=-1;
+function randomFact(){
+  let i; do{ i=Math.floor(Math.random()*FACTS.length); }while(FACTS.length>1 && i===lastRF);
+  lastRF=i; const f=FACTS[i], el=document.getElementById('rfFact');
+  el.style.opacity=0;
+  setTimeout(()=>{ el.innerHTML=`${f.em} <b>${f.num}</b> — ${f.a}`; el.style.opacity=1; },150);
+}
+
+/* ============ QUOTES ============ */
+function esc(s){ return s.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+function addQuote(){
+  const p=document.getElementById('qPage').value.trim();
+  const t=document.getElementById('qText').value.trim();
+  if(!t){ toast('문장을 입력해 주세요'); return; }
+  S.quotes.push({p:p,t:t}); persist();
+  document.getElementById('qPage').value=''; document.getElementById('qText').value='';
+  renderQuotes(); toast('문장을 담았어요 📖');
+  document.getElementById('qText').focus();
+}
+function renderQuotes(){
+  const list=document.getElementById('qList');
+  if(!S.quotes.length){ list.innerHTML='<div class="qempty">아직 담은 문장이 없어요. 첫 문장을 남겨 보세요.</div>'; return; }
+  list.innerHTML=S.quotes.map((q,i)=>`
+    <div class="qitem">
+      ${q.p?`<span class="qp">${esc(q.p)}쪽</span>`:''}
+      <span class="qt">${esc(q.t)}</span>
+      <span class="qx" onclick="removeQuote(${i})">✕</span>
+    </div>`).join('');
+}
+function removeQuote(i){ S.quotes.splice(i,1); persist(); renderQuotes(); }
+
 /* ============ FX ============ */
 let toastT;
 function toast(msg){
@@ -737,7 +1066,7 @@ function burst(){
 document.getElementById('resetLink').onclick=()=>{
   if(confirm('모든 기록을 지우고 처음부터 시작할까요?')){
     localStorage.removeItem(KEY);
-    S={quizBest:null,foundOrgans:[],wordSolved:[],flipped:[],reflText:"",stars:0};
+    S={quizBest:null,foundOrgans:[],wordSolved:[],flipped:[],reflText:"",stars:0,tfBest:0,numbersDone:false,age:"",quotes:[]};
     refreshHome(); toast('기록을 초기화했어요');
   }
 };
