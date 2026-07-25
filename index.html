@@ -76,6 +76,28 @@
 
   /* ---------- Quiz ---------- */
   .qcard{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:20px 18px;box-shadow:var(--shadow)}
+  /* difficulty picker */
+  .levelpick{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:20px 18px;box-shadow:var(--shadow)}
+  .levelpick h3{margin:2px 0 16px;font-size:17px;text-align:center}
+  .levelbtn{width:100%;display:flex;align-items:center;gap:14px;text-align:left;margin-bottom:11px;
+    background:var(--panel2);border:1.5px solid var(--line);border-radius:15px;padding:15px 16px;cursor:pointer;color:var(--ink);transition:.15s}
+  .levelbtn:active{transform:scale(.98)}
+  .levelbtn .lem{font-size:28px;flex:0 0 auto}
+  .levelbtn .lbody{flex:1;display:flex;flex-direction:column}
+  .levelbtn .lbody b{font-size:16px;font-weight:900}
+  .levelbtn .lbody small{font-size:12px;color:var(--muted);margin-top:2px}
+  .levelbtn .larrow{color:var(--dim);font-size:20px;font-weight:900}
+  .levelbtn.lv-normal:hover{border-color:var(--green)}
+  .levelbtn.lv-hard:hover{border-color:var(--gold)}
+  .levelbtn.lv-expert{background:linear-gradient(160deg,#2a1114,#191013);border-color:#40232a}
+  .levelbtn.lv-expert:hover{border-color:var(--red)}
+  .levelbtn.lv-expert .lbody b{color:var(--red2)}
+  .bestline{text-align:center;font-size:12px;color:var(--dim);margin-top:4px}
+  /* timer */
+  .qtimer{height:7px;background:#0d1319;border-radius:99px;overflow:hidden;margin:-4px 0 14px;border:1px solid var(--line)}
+  .qtimer-bar{height:100%;width:100%;background:linear-gradient(90deg,var(--green),var(--gold),var(--red))}
+  .qtimer-bar.low{background:var(--red)}
+
   .qmeta{display:flex;justify-content:space-between;align-items:center;font-size:12px;color:var(--muted);margin-bottom:10px}
   .qtype{font-weight:800;padding:3px 9px;border-radius:99px;font-size:11px}
   .qtype.ox{background:rgba(77,171,247,.15);color:#7cc0ff}
@@ -506,7 +528,41 @@ const QUIZ = [
   {t:"ox", q:"면역계가 지나치게 예민하게 반응하면 오히려 알레르기나 자가면역 질환이 생길 수 있다.",
    a:true, e:"나를 지키는 면역이 나를 공격하기도 해요. 강한 것만이 좋은 게 아니라, 균형이 핵심입니다."},
   {t:"ox", q:"머리카락과 손톱은 죽은 세포로 이루어져 있어서, 잘라도 아프지 않다.",
-   a:true, e:"자라나는 뿌리는 살아 있지만 밖으로 드러난 부분은 죽은 세포예요. 그래서 이발과 손톱깎기가 아프지 않습니다."}
+   a:true, e:"자라나는 뿌리는 살아 있지만 밖으로 드러난 부분은 죽은 세포예요. 그래서 이발과 손톱깎기가 아프지 않습니다."},
+
+  /* ===== 어려움(lv2): 세밀한 수치 ===== */
+  {t:"mc", lv:2, q:"우리 몸의 혈관을 처음부터 끝까지 모두 이으면 그 길이는 대략 얼마나 될까?",
+   o:["약 960km","약 9,600km","약 9만 6천 km (지구를 두 바퀴 넘게)","약 96만 km"], a:2,
+   e:"약 9만 6천 km, 지구 둘레를 두 바퀴 넘게 감을 수 있는 길이예요. 그 좁은 관들이 온몸 구석구석에 피를 나릅니다."},
+  {t:"mc", lv:2, q:"우리 세포 안에서 에너지를 만들어내며, 먼 옛날 독립된 세균이었다고 여겨지는 소기관은?",
+   o:["리보솜","미토콘드리아","골지체","리소좀"], a:1,
+   e:"미토콘드리아는 자기만의 DNA를 가지고 있어요. 아주 오래전 우리 조상 세포와 손잡은 세균의 후손으로 봅니다."},
+  {t:"mc", lv:2, q:"성인의 뇌에 들어 있는 신경세포(뉴런)의 수는 대략 얼마일까?",
+   o:["약 86만 개","약 8억 6천만 개","약 860억 개","약 8조 6천억 개"], a:2,
+   e:"약 860억 개의 뉴런이 서로 수천 개씩 연결돼 있어요. 그 연결의 총수는 상상하기 어려울 만큼 많습니다."},
+  {t:"mc", lv:2, q:"심장이 하루 동안 온몸으로 뿜어내는 피의 양은 대략 얼마나 될까?",
+   o:["약 70리터","약 700리터","약 7,000리터","약 7만 리터"], a:2,
+   e:"주먹만 한 심장이 하루에 약 7,000리터를 밀어내요. 욕조 수십 개를 채울 만한 양입니다."},
+  {t:"mc", lv:2, q:"폐 속에서 공기와 피가 산소를 주고받는 작은 공기주머니(폐포)의 수는 대략?",
+   o:["약 3천 개","약 30만 개","약 3억 개","약 300억 개"], a:2,
+   e:"약 3억 개의 폐포가 접혀 있어서, 다 펼치면 테니스 코트만 한 넓이가 됩니다."},
+
+  /* ===== 전문가(lv3): 인물·역사·심화 ===== */
+  {t:"mc", lv:3, q:"본인 동의 없이 1951년에 채취돼, 지금도 전 세계 실험실에서 배양되는 '불멸의 세포(HeLa)'의 주인공은?",
+   o:["로절린드 프랭클린","헨리에타 랙스","마리 퀴리","플로렌스 나이팅게일"], a:1,
+   e:"헨리에타 랙스의 암세포는 그녀가 세상을 떠난 뒤에도 끝없이 증식하며 수많은 의학 연구에 쓰였어요. 동의와 윤리를 둘러싼 논쟁의 상징이 되었습니다."},
+  {t:"mc", lv:3, q:"19세기에 '손 씻기'만으로 산모의 사망을 크게 줄였지만, 동료 의사들에게 배척당한 인물은?",
+   o:["조지프 리스터","루이 파스퇴르","이그나즈 제멜바이스","에드워드 제너"], a:2,
+   e:"제멜바이스는 세균이 알려지기 전, 손 소독의 효과를 증명했지만 무시당했어요. 옳은 발견도 때를 못 만나면 외면받는다는 뼈아픈 이야기입니다."},
+  {t:"mc", lv:3, q:"곰팡이에서 우연히 페니실린을 발견해 항생제 시대를 연 사람은?",
+   o:["로베르트 코흐","알렉산더 플레밍","조너스 소크","하워드 플로리"], a:1,
+   e:"플레밍이 배양접시의 곰팡이 주변에 세균이 자라지 않는 걸 발견한 게 시작이었어요. 우연을 놓치지 않은 관찰이 수많은 생명을 살렸습니다."},
+  {t:"mc", lv:3, q:"인간 게놈 계획이 밝혀낸, 과학자들의 예상보다 훨씬 적었던 사람의 유전자 수는 대략?",
+   o:["약 2천 개","약 2만 개","약 10만 개","약 100만 개"], a:1,
+   e:"고작 2만 개 남짓! 벼 같은 식물보다도 적어요. 유전자 수가 아니라 그 쓰임새가 우리를 복잡하게 만든다는 뜻입니다."},
+  {t:"mc", lv:3, q:"최근 연구에 따르면 사람의 평균 체온은, 오래 알려진 37℃와 비교해 실제로는 어떨까?",
+   o:["그보다 조금 낮다","정확히 37℃다","오히려 더 높다","사람마다 차이가 전혀 없다"], a:0,
+   e:"37℃는 19세기의 낡은 기준이에요. 실제 평균은 그보다 조금 낮고, 시대가 흐르며 더 내려가고 있다는 연구도 있습니다."}
 ];
 
 const ORGANS = [
@@ -545,7 +601,10 @@ const WORDS = [
   {type:"fill", before:"우리 몸의 세포 수는 대략 ", after:"조 개다.", answer:"37", clue:"숫자 두 자리"},
   {type:"cho", word:"멜라닌", cho:"ㅁㄹㄴ", clue:"피부색을 결정하고 자외선을 막아 주는 색소"},
   {type:"cho", word:"천연두", cho:"ㅊㅇㄷ", clue:"백신으로 지구에서 완전히 사라진 유일한 전염병"},
-  {type:"fill", before:"우리 몸은 무게로 약 ", after:"%가 물이다.", answer:"60", clue:"숫자 두 자리"}
+  {type:"fill", before:"우리 몸은 무게로 약 ", after:"%가 물이다.", answer:"60", clue:"숫자 두 자리"},
+  {type:"cho", word:"미토콘드리아", cho:"ㅁㅌㅋㄷㄹㅇ", clue:"세포 속 에너지 발전소. 먼 옛날 독립된 세균이었다고 본다"},
+  {type:"cho", word:"헤모글로빈", cho:"ㅎㅁㄱㄹㅂ", clue:"피를 붉게 물들이고 산소를 실어 나르는 단백질"},
+  {type:"fill", before:"곰팡이에서 페니실린을 발견한 사람은 알렉산더 ", after:"이다.", answer:"플레밍", clue:"인물 이름(성)"}
 ];
 
 const FACTS = [
@@ -593,13 +652,22 @@ const TF = [
   {claim:"인간의 감각은 시각·청각·후각·미각·촉각의 다섯 가지뿐이다.", real:false,
    e:"가짜! 균형, 온도, 통증, 몸의 위치 감각 등 우리는 다섯 개보다 훨씬 많은 감각을 씁니다."},
   {claim:"간은 일부를 잘라내도 다시 자라날 만큼 재생력이 뛰어나다.", real:true,
-   e:"진짜예요. 500가지가 넘는 일을 하면서 스스로 재생까지 하는 놀라운 화학 공장입니다."}
+   e:"진짜예요. 500가지가 넘는 일을 하면서 스스로 재생까지 하는 놀라운 화학 공장입니다."},
+  {claim:"세포 속 에너지 발전소인 미토콘드리아는 오직 어머니에게서만 물려받는다.", real:true,
+   e:"진짜예요. 미토콘드리아 DNA는 모계로만 전해져, 먼 조상을 추적하는 열쇠로도 쓰입니다."},
+  {claim:"산소가 부족한 정맥 속 피는 실제로 파란색을 띤다.", real:false,
+   e:"가짜! 피는 늘 붉어요. 정맥이 피부 밖에서 파랗게 보이는 건 빛이 피부를 통과하는 방식 때문입니다."},
+  {claim:"몸의 세포는 대부분 몇 년 안에 교체되지만, 뇌의 신경세포 상당수는 평생 함께한다.", real:true,
+   e:"진짜예요. 그래서 '지금의 나'는 몇 년 전과 거의 다른 재료로 되어 있으면서도, 기억과 자아는 이어집니다."},
+  {claim:"위산은 금속도 녹일 만큼 강해서, 위벽이 끊임없이 새로 만들어지지 않으면 스스로 소화될 것이다.", real:true,
+   e:"진짜예요. 위는 며칠마다 안쪽 벽을 새로 갈아 끼우며 강한 산으로부터 자신을 지킵니다."}
 ];
 
 /* 배지: 조건 함수로 판정 */
 const BADGES = [
   {id:"first", em:"🎯", n:"첫 도전", cond:s=>s.quizBest!==null},
-  {id:"perfect", em:"💯", n:"만점왕", cond:s=>s.quizBest>=QUIZ.length*10},
+  {id:"perfect", em:"💯", n:"만점왕", cond:s=>!!s.quizPerfect},
+  {id:"expert", em:"🔥", n:"전문가 정복", cond:s=>!!s.expertAce},
   {id:"explorer", em:"🗺️", n:"인체 탐험가", cond:s=>s.foundOrgans.length>=ORGANS.length},
   {id:"word", em:"🔤", n:"낱말 마스터", cond:s=>s.wordSolved.length>=WORDS.length},
   {id:"number", em:"🔢", n:"숫자 마법사", cond:s=>!!s.numbersDone},
@@ -623,6 +691,9 @@ S.tfBest = S.tfBest ?? 0;
 S.numbersDone = S.numbersDone ?? false;
 S.age = S.age ?? "";
 S.quotes = S.quotes ?? [];
+S.quizBests = S.quizBests ?? {};
+S.quizPerfect = S.quizPerfect ?? false;
+S.expertAce = S.expertAce ?? false;
 
 /* ============ NAV ============ */
 function go(id){
@@ -682,78 +753,129 @@ function renderBadges(){
 function setBar(id,pct){ const el=document.getElementById(id); if(el) el.style.width=Math.min(100,pct)+'%'; }
 function badge(id,txt,done){ const el=document.getElementById(id); if(!el)return; el.textContent=txt; el.classList.toggle('done',!!done); }
 
-/* ============ QUIZ ============ */
-let qi=0, qscore=0;
-function startQuiz(){ qi=0; qscore=0; document.getElementById('quizScore').textContent='0점'; renderQ(); }
+/* ============ QUIZ (난이도 3단계) ============ */
+const LEVELS={
+  normal:{name:'보통', em:'🙂', desc:'책을 읽었다면 풀 수 있는 기본 문항', pool:q=>(q.lv||1)===1, count:12, time:0, penalty:0},
+  hard:{name:'어려움', em:'😀', desc:'세밀한 수치까지 + 20초 제한시간', pool:q=>(q.lv||1)<=2, count:15, time:20, penalty:0},
+  expert:{name:'전문가', em:'🔥', desc:'인물·역사·심화 + 12초 + 오답 감점', pool:q=>(q.lv||1)>=2, count:99, time:12, penalty:5}
+};
+let quizPool=[], qi=0, qscore=0, qLevel='normal', qMax=0, qTimer=null, qAnswered=false;
+
+function shuffle(a){ a=a.slice(); for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];} return a; }
+
+function startQuiz(){
+  document.getElementById('quizScore').textContent='';
+  const bests=S.quizBests||{};
+  document.getElementById('quizStage').innerHTML=`
+    <div class="levelpick">
+      <h3>난이도를 골라 주세요</h3>
+      ${Object.entries(LEVELS).map(([k,l])=>{
+        const b=bests[k]!=null?`<div class="bestline">최고 ${bests[k]}%</div>`:'';
+        return `<button class="levelbtn lv-${k}" onclick="beginQuiz('${k}')">
+          <span class="lem">${l.em}</span>
+          <span class="lbody"><b>${l.name}</b><small>${l.desc}</small>${b}</span>
+          <span class="larrow">→</span>
+        </button>`;}).join('')}
+    </div>`;
+}
+function beginQuiz(level){
+  qLevel=level; const L=LEVELS[level];
+  quizPool=shuffle(QUIZ.filter(L.pool)).slice(0,L.count);
+  qMax=quizPool.length*10; qi=0; qscore=0;
+  document.getElementById('quizScore').textContent='0점';
+  renderQ();
+}
 function renderQ(){
-  const q=QUIZ[qi];
-  const stage=document.getElementById('quizStage');
-  let optHtml='';
+  clearQTimer(); qAnswered=false;
+  const q=quizPool[qi], L=LEVELS[qLevel], keys=['A','B','C','D'];
+  let optHtml;
   if(q.t==='ox'){
     optHtml=`<div class="opts ox-opts">
       <button class="opt" onclick="answer(this,true)">⭕<br><span style="font-size:13px">맞아요</span></button>
       <button class="opt" onclick="answer(this,false)">❌<br><span style="font-size:13px">아니에요</span></button></div>`;
   }else{
-    const keys=['A','B','C','D'];
-    optHtml='<div class="opts">'+q.o.map((o,i)=>
-      `<button class="opt" onclick="answer(this,${i})"><span class="k">${keys[i]}</span><span>${o}</span></button>`).join('')+'</div>';
+    // 보기 순서를 섞어 정답 위치를 예측하지 못하게(난이도 상승)
+    const sh=shuffle(q.o.map((o,i)=>({o,correct:i===q.a})));
+    q._ci=sh.findIndex(x=>x.correct);
+    optHtml='<div class="opts">'+sh.map((x,i)=>
+      `<button class="opt" onclick="answer(this,${i})"><span class="k">${keys[i]}</span><span>${x.o}</span></button>`).join('')+'</div>';
   }
-  stage.innerHTML=`
+  const timer=L.time>0?`<div class="qtimer"><div class="qtimer-bar" id="qtBar"></div></div>`:'';
+  document.getElementById('quizStage').innerHTML=`
     <div class="qcard">
       <div class="qmeta">
-        <span>문제 ${qi+1} / ${QUIZ.length}</span>
-        <span class="qtype ${q.t}">${q.t==='ox'?'O · X':'객관식'}</span>
+        <span>문제 ${qi+1} / ${quizPool.length}</span>
+        <span class="qtype ${q.t}">${q.t==='ox'?'O · X':'객관식'} · ${L.em}${L.name}</span>
       </div>
+      ${timer}
       <div class="qtext">${q.q}</div>
       ${optHtml}
       <div class="explain" id="exp"></div>
-      <button class="nextbtn" id="nextBtn" onclick="nextQ()">${qi<QUIZ.length-1?'다음 문제 →':'결과 보기 🎉'}</button>
+      <button class="nextbtn" id="nextBtn" onclick="nextQ()">${qi<quizPool.length-1?'다음 문제 →':'결과 보기 🎉'}</button>
     </div>`;
+  if(L.time>0) startQTimer(L.time);
 }
+function startQTimer(sec){
+  const bar=document.getElementById('qtBar');
+  bar.style.transition='none'; bar.style.width='100%';
+  requestAnimationFrame(()=>{ bar.style.transition=`width ${sec}s linear`; bar.style.width='0%'; });
+  setTimeout(()=>{ const b=document.getElementById('qtBar'); if(b)b.classList.add('low'); }, Math.max(0,(sec-5))*1000);
+  qTimer=setTimeout(()=>{ if(!qAnswered) answer(null,null); }, sec*1000);
+}
+function clearQTimer(){ if(qTimer){ clearTimeout(qTimer); qTimer=null; } }
 function answer(btn,val){
-  const q=QUIZ[qi];
-  const correct = (q.t==='ox') ? (val===q.a) : (val===q.a);
-  document.querySelectorAll('#quizStage .opt').forEach((el,i)=>{
-    el.classList.add('disabled');
-    if(q.t!=='ox'){ if(i===q.a) el.classList.add('correct'); }
-  });
+  if(qAnswered) return;
+  qAnswered=true; clearQTimer();
+  const q=quizPool[qi], L=LEVELS[qLevel];
+  const opts=document.querySelectorAll('#quizStage .opt');
+  opts.forEach(el=>el.classList.add('disabled'));
+  let correct;
   if(q.t==='ox'){
-    const btns=document.querySelectorAll('#quizStage .opt');
-    // index 0 = true(맞아요), 1 = false
-    const correctIdx = q.a?0:1;
-    btns[correctIdx].classList.add('correct');
-    if(!correct) btn.classList.add('wrong');
+    correct=(val===q.a);
+    opts[q.a?0:1].classList.add('correct');
+    if(!correct && btn) btn.classList.add('wrong');
   }else{
-    if(!correct) btn.classList.add('wrong');
+    correct=(val===q._ci);
+    if(opts[q._ci]) opts[q._ci].classList.add('correct');
+    if(!correct && btn) btn.classList.add('wrong');
   }
-  if(correct){ qscore+=10; document.getElementById('quizScore').textContent=qscore+'점'; }
+  if(correct) qscore+=10;
+  else if(L.penalty) qscore=Math.max(0,qscore-L.penalty);
+  document.getElementById('quizScore').textContent=qscore+'점';
   const exp=document.getElementById('exp');
-  exp.innerHTML = (correct?'<b>정답! ✅ </b>':'<b>아쉬워요 💡 </b>')+q.e;
-  exp.classList.add('show');
+  const head = correct?'<b>정답! ✅ </b>' : (val===null?'<b>시간 초과 ⏰ </b>':'<b>아쉬워요 💡 </b>');
+  exp.innerHTML=head+q.e; exp.classList.add('show');
   document.getElementById('nextBtn').classList.add('show');
 }
 function nextQ(){
-  if(qi<QUIZ.length-1){ qi++; renderQ(); window.scrollTo(0,0); }
+  clearQTimer();
+  if(qi<quizPool.length-1){ qi++; renderQ(); window.scrollTo(0,0); }
   else showResult();
 }
 function showResult(){
-  if(S.quizBest===null || qscore>S.quizBest){ S.quizBest=qscore; persist(); }
-  const max=QUIZ.length*10;
-  const pct=qscore/max*100;
+  clearQTimer();
+  const pct=qMax?Math.round(qscore/qMax*100):0;
+  S.quizBests=S.quizBests||{};
+  if(S.quizBests[qLevel]==null || pct>S.quizBests[qLevel]) S.quizBests[qLevel]=pct;
+  if(S.quizBest===null || qscore>S.quizBest) S.quizBest=qscore;
+  if(pct===100) S.quizPerfect=true;
+  if(qLevel==='expert' && pct>=80) S.expertAce=true;
+  persist();
+  const L=LEVELS[qLevel];
   let grade,msg;
   if(pct>=90){grade='🏆';msg='인체 박사님! 책을 완벽히 소화했어요.';}
   else if(pct>=70){grade='🥇';msg='훌륭해요! 핵심을 제대로 기억하고 있네요.';}
-  else if(pct>=50){grade='🥈';msg='좋아요. 몇 장면만 다시 떠올리면 완벽!';}
+  else if(pct>=50){grade='🥈';msg='좋아요. 조금만 더 파고들면 완벽!';}
   else{grade='🥉';msg='괜찮아요. 사실 카드를 보고 다시 도전해 봐요.';}
   if(pct>=70) burst();
   document.getElementById('quizStage').innerHTML=`
     <div class="result">
       <div class="grade">${grade}</div>
-      <div class="big">${qscore}<span style="font-size:20px;color:var(--muted)">/${max}점</span></div>
-      <div class="msg">${msg}<br><span style="font-size:12px">최고 기록 ${S.quizBest}점</span></div>
+      <div class="big">${qscore}<span style="font-size:20px;color:var(--muted)">/${qMax}점</span></div>
+      <div class="msg">${L.em} ${L.name} · 정답률 ${pct}%<br>${msg}<br><span style="font-size:12px">이 난이도 최고 ${S.quizBests[qLevel]}%</span></div>
       <div class="row">
-        <button class="btn" onclick="go('home')">홈으로</button>
-        <button class="btn primary" onclick="startQuiz()">다시 도전</button>
+        <button class="btn" onclick="startQuiz()">난이도 변경</button>
+        <button class="btn primary" onclick="beginQuiz('${qLevel}')">다시 도전</button>
       </div>
     </div>`;
 }
@@ -1066,7 +1188,7 @@ function burst(){
 document.getElementById('resetLink').onclick=()=>{
   if(confirm('모든 기록을 지우고 처음부터 시작할까요?')){
     localStorage.removeItem(KEY);
-    S={quizBest:null,foundOrgans:[],wordSolved:[],flipped:[],reflText:"",stars:0,tfBest:0,numbersDone:false,age:"",quotes:[]};
+    S={quizBest:null,foundOrgans:[],wordSolved:[],flipped:[],reflText:"",stars:0,tfBest:0,numbersDone:false,age:"",quotes:[],quizBests:{},quizPerfect:false,expertAce:false};
     refreshHome(); toast('기록을 초기화했어요');
   }
 };
