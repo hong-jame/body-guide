@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>바디: 우리 몸 안내서 · 독후활동</title>
+<style>
+  :root{
+    --bg:#0f1216; --panel:#161b22; --panel2:#1c232d; --line:#2a3340;
+    --ink:#eef2f7; --muted:#9aa7b6; --dim:#6b7788;
+    --red:#e5484d; --red2:#ff6b6b; --crimson:#c1121f;
+    --gold:#f2b705; --green:#2ecc71; --blue:#4dabf7; --purple:#9775fa;
+    --shadow:0 10px 30px rgba(0,0,0,.35);
+    --r:18px;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0;padding:0}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Malgun Gothic","Apple SD Gothic Neo",sans-serif;
+    background:radial-gradient(1200px 600px at 50% -10%,#1a2230 0%,var(--bg) 60%);
+    color:var(--ink); min-height:100vh; line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:720px;margin:0 auto;padding:18px 16px 90px}
+  a{color:inherit}
+
+  /* ---------- Header ---------- */
+  .hero{
+    text-align:center; padding:26px 18px 22px; border-radius:24px;
+    background:linear-gradient(160deg,#3a0d12 0%,#1a1013 55%,#141a22 100%);
+    border:1px solid #40232a; box-shadow:var(--shadow); position:relative; overflow:hidden;
+  }
+  .hero::before{content:"";position:absolute;inset:0;
+    background:radial-gradient(400px 200px at 80% 0%,rgba(229,72,77,.25),transparent 60%);}
+  .hero .kicker{font-size:12px;letter-spacing:3px;color:var(--red2);font-weight:800;position:relative}
+  .hero h1{margin:6px 0 4px;font-size:26px;font-weight:900;letter-spacing:-.5px;position:relative}
+  .hero .sub{color:var(--muted);font-size:13px;position:relative}
+  .hero .author{margin-top:8px;font-size:12px;color:var(--dim);position:relative}
+
+  .progressbar{margin:16px auto 0;max-width:360px;position:relative}
+  .progressbar .track{height:9px;background:#2a1519;border-radius:99px;overflow:hidden;border:1px solid #40232a}
+  .progressbar .fill{height:100%;width:0;background:linear-gradient(90deg,var(--red),var(--gold));transition:width .6s cubic-bezier(.2,.8,.2,1)}
+  .progressbar .lab{font-size:12px;color:var(--muted);margin-top:7px;text-align:center}
+
+  /* ---------- Home cards ---------- */
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px}
+  .card{
+    background:linear-gradient(180deg,var(--panel2),var(--panel));
+    border:1px solid var(--line);border-radius:var(--r);padding:16px 15px;
+    cursor:pointer;transition:transform .15s,border-color .2s,box-shadow .2s;position:relative;overflow:hidden;
+  }
+  .card:active{transform:scale(.97)}
+  .card:hover{border-color:#3a4658;box-shadow:var(--shadow)}
+  .card .emoji{font-size:30px}
+  .card h3{margin:8px 0 3px;font-size:16px;font-weight:800}
+  .card p{margin:0;font-size:12px;color:var(--muted);min-height:32px}
+  .card .badge{position:absolute;top:11px;right:11px;font-size:10px;font-weight:800;padding:3px 8px;border-radius:99px;background:#22303e;color:var(--muted)}
+  .card .badge.done{background:rgba(46,204,113,.18);color:#63e6a0}
+  .card .bar{height:5px;border-radius:99px;background:#0d1319;margin-top:11px;overflow:hidden}
+  .card .bar i{display:block;height:100%;width:0;background:var(--accent,var(--red));transition:width .5s}
+
+  .home-foot{margin-top:18px;text-align:center;font-size:11px;color:var(--dim);line-height:1.7}
+
+  /* ---------- Screens ---------- */
+  .screen{display:none;animation:fade .3s}
+  .screen.active{display:block}
+  @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+  .topbar{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+  .backbtn{background:var(--panel2);border:1px solid var(--line);color:var(--ink);
+    border-radius:12px;padding:9px 13px;font-size:14px;font-weight:700;cursor:pointer}
+  .backbtn:active{transform:scale(.95)}
+  .topbar h2{margin:0;font-size:18px;font-weight:900}
+  .topbar .spacer{flex:1}
+  .pill{font-size:12px;font-weight:800;padding:6px 11px;border-radius:99px;background:var(--panel2);border:1px solid var(--line);color:var(--muted)}
+
+  /* ---------- Quiz ---------- */
+  .qcard{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:20px 18px;box-shadow:var(--shadow)}
+  .qmeta{display:flex;justify-content:space-between;align-items:center;font-size:12px;color:var(--muted);margin-bottom:10px}
+  .qtype{font-weight:800;padding:3px 9px;border-radius:99px;font-size:11px}
+  .qtype.ox{background:rgba(77,171,247,.15);color:#7cc0ff}
+  .qtype.mc{background:rgba(242,183,5,.15);color:var(--gold)}
+  .qtext{font-size:18px;font-weight:800;line-height:1.5;margin:6px 0 18px}
+  .opts{display:grid;gap:10px}
+  .opt{background:var(--panel2);border:1.5px solid var(--line);border-radius:14px;padding:14px 15px;
+    font-size:15px;font-weight:600;cursor:pointer;text-align:left;color:var(--ink);transition:.15s;display:flex;align-items:center;gap:11px}
+  .opt:active{transform:scale(.98)}
+  .opt .k{width:26px;height:26px;flex:0 0 26px;border-radius:8px;background:#0e141b;display:grid;place-items:center;font-size:13px;font-weight:800;color:var(--muted)}
+  .opt.correct{border-color:var(--green);background:rgba(46,204,113,.14)}
+  .opt.correct .k{background:var(--green);color:#06210f}
+  .opt.wrong{border-color:var(--red);background:rgba(229,72,77,.14)}
+  .opt.wrong .k{background:var(--red);color:#2a0608}
+  .opt.disabled{pointer-events:none;opacity:.55}
+  .ox-opts{grid-template-columns:1fr 1fr}
+  .ox-opts .opt{justify-content:center;font-size:22px;font-weight:900;padding:22px}
+
+  .explain{margin-top:16px;padding:14px;border-radius:14px;background:#12191f;border-left:4px solid var(--gold);font-size:14px;color:#cbd6e2;display:none}
+  .explain.show{display:block;animation:fade .3s}
+  .explain b{color:var(--gold)}
+  .nextbtn{margin-top:16px;width:100%;padding:15px;border-radius:14px;border:none;font-size:16px;font-weight:800;
+    background:linear-gradient(90deg,var(--red),var(--crimson));color:#fff;cursor:pointer;display:none}
+  .nextbtn.show{display:block;animation:fade .3s}
+  .nextbtn:active{transform:scale(.98)}
+
+  /* Result */
+  .result{text-align:center;padding:30px 18px;background:var(--panel);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow)}
+  .result .big{font-size:56px;font-weight:900;line-height:1;background:linear-gradient(90deg,var(--gold),var(--red2));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .result .grade{font-size:40px;margin:6px 0}
+  .result .msg{color:var(--muted);font-size:15px;margin:8px 0 20px}
+  .result .row{display:flex;gap:10px;justify-content:center}
+  .btn{padding:13px 20px;border-radius:13px;border:1px solid var(--line);background:var(--panel2);color:var(--ink);font-weight:800;font-size:14px;cursor:pointer}
+  .btn.primary{background:linear-gradient(90deg,var(--red),var(--crimson));border:none;color:#fff}
+  .btn:active{transform:scale(.97)}
+
+  /* ---------- Body map ---------- */
+  .bodywrap{display:grid;grid-template-columns:1fr;gap:14px}
+  .stage{background:radial-gradient(300px 300px at 50% 30%,#1e2734,#141a21);border:1px solid var(--line);border-radius:var(--r);padding:10px;display:grid;place-items:center;position:relative;min-height:420px}
+  .hint-map{font-size:12px;color:var(--dim);text-align:center;margin-top:2px}
+  .organ{cursor:pointer;transition:.2s}
+  .organ:hover{filter:brightness(1.25)}
+  .organ.found .dot{fill:var(--green)}
+  .dot{fill:var(--red);stroke:#fff;stroke-width:1.5;filter:drop-shadow(0 0 6px rgba(229,72,77,.9))}
+  .dotpulse{animation:pulse 1.6s infinite}
+  @keyframes pulse{0%{r:7}50%{r:10}100%{r:7}}
+  .organlabel{font-size:11px;fill:var(--muted);font-weight:700}
+
+  .factpop{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:18px;box-shadow:var(--shadow);min-height:150px}
+  .factpop .ttl{font-size:19px;font-weight:900;display:flex;align-items:center;gap:8px}
+  .factpop .ttl .em{font-size:24px}
+  .factpop .body{margin-top:10px;font-size:14.5px;color:#cbd6e2}
+  .factpop .body li{margin:7px 0}
+  .factpop .placeholder{color:var(--dim);font-size:14px;text-align:center;padding-top:30px}
+  .mapcount{font-size:12px;color:var(--muted);text-align:center;margin-top:4px}
+
+  /* ---------- Initial / fill ---------- */
+  .initcard{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:22px 18px;box-shadow:var(--shadow);text-align:center}
+  .choseong{font-size:44px;font-weight:900;letter-spacing:10px;color:var(--gold);margin:6px 0}
+  .clue{color:var(--muted);font-size:14px;margin-bottom:16px}
+  .fillsentence{font-size:18px;font-weight:700;line-height:1.7;margin:6px 0 16px}
+  .blank{display:inline-block;min-width:70px;border-bottom:3px solid var(--gold);color:var(--gold);font-weight:900;text-align:center;padding:0 6px}
+  .answerbox{width:100%;padding:15px;font-size:18px;text-align:center;border-radius:13px;border:2px solid var(--line);background:var(--panel2);color:var(--ink);font-weight:800;outline:none}
+  .answerbox:focus{border-color:var(--gold)}
+  .ifeedback{margin-top:14px;font-size:15px;font-weight:800;min-height:24px}
+  .ifeedback.ok{color:var(--green)}
+  .ifeedback.no{color:var(--red2)}
+  .revealbtn{margin-top:10px;background:none;border:none;color:var(--dim);font-size:12px;text-decoration:underline;cursor:pointer}
+
+  /* ---------- Fact cards flip ---------- */
+  .flipgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  @media(max-width:520px){.flipgrid{grid-template-columns:1fr}}
+  .flip{perspective:1200px;height:170px;cursor:pointer}
+  .flipinner{position:relative;width:100%;height:100%;transition:transform .6s;transform-style:preserve-3d}
+  .flip.flipped .flipinner{transform:rotateY(180deg)}
+  .flipface{position:absolute;inset:0;backface-visibility:hidden;border-radius:16px;padding:16px;display:flex;flex-direction:column;justify-content:center;border:1px solid var(--line)}
+  .flipfront{background:linear-gradient(160deg,#241017,#171d25)}
+  .flipfront .q{font-size:15px;font-weight:800}
+  .flipfront .tap{font-size:11px;color:var(--dim);margin-top:10px}
+  .flipfront .em{font-size:26px;margin-bottom:6px}
+  .flipback{background:linear-gradient(160deg,#12251b,#141a21);transform:rotateY(180deg)}
+  .flipback .a{font-size:13.5px;color:#d6e2d9;font-weight:600}
+  .flipback .num{font-size:22px;font-weight:900;color:var(--gold);margin-bottom:4px}
+
+  /* ---------- Reflection ---------- */
+  .refl{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:18px;box-shadow:var(--shadow);margin-top:16px}
+  .refl h3{margin:0 0 4px;font-size:16px}
+  .refl .prompts{font-size:12.5px;color:var(--muted);margin-bottom:12px;line-height:1.8}
+  .stars{font-size:30px;letter-spacing:4px;cursor:pointer;user-select:none;margin-bottom:12px}
+  .stars span{opacity:.3;transition:.15s}
+  .stars span.on{opacity:1;filter:drop-shadow(0 0 6px rgba(242,183,5,.6))}
+  textarea{width:100%;min-height:150px;border-radius:14px;border:1.5px solid var(--line);background:var(--panel2);color:var(--ink);
+    padding:14px;font-size:15px;font-family:inherit;line-height:1.6;resize:vertical;outline:none}
+  textarea:focus{border-color:var(--red)}
+  .saverow{display:flex;gap:10px;align-items:center;margin-top:12px}
+  .savestate{font-size:12px;color:var(--dim);flex:1}
+  .savestate.saved{color:var(--green)}
+
+  .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(20px);background:#0b0f14;border:1px solid var(--line);
+    color:var(--ink);padding:12px 20px;border-radius:14px;font-size:14px;font-weight:700;box-shadow:var(--shadow);opacity:0;pointer-events:none;transition:.3s;z-index:99}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+  .confetti{position:fixed;width:10px;height:14px;top:-20px;z-index:80;pointer-events:none;border-radius:2px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- ===== HOME ===== -->
+  <div id="home" class="screen active">
+    <div class="hero">
+      <div class="kicker">독후 활동 · BODY</div>
+      <h1>바디 : 우리 몸 안내서</h1>
+      <div class="sub">읽은 책을 놀이로 되새기는 시간</div>
+      <div class="author">원작 · 빌 브라이슨 &nbsp;|&nbsp; A Guide for Occupants</div>
+      <div class="progressbar">
+        <div class="track"><div class="fill" id="homeFill"></div></div>
+        <div class="lab" id="homeLab">4가지 활동 중 0개 완료</div>
+      </div>
+    </div>
+
+    <div class="grid">
+      <div class="card" style="--accent:var(--gold)" onclick="go('quiz')">
+        <span class="badge" id="b-quiz">15문항</span>
+        <div class="emoji">🧠</div>
+        <h3>퀴즈 도전</h3>
+        <p>책 속 놀라운 사실로 겨루는 객관식과 OX 25문항</p>
+        <div class="bar"><i id="p-quiz"></i></div>
+      </div>
+
+      <div class="card" style="--accent:var(--red)" onclick="go('body')">
+        <span class="badge" id="b-body">10기관</span>
+        <div class="emoji">🫀</div>
+        <h3>인체 지도 탐험</h3>
+        <p>몸의 기관을 눌러 숨은 이야기를 모두 찾아보기</p>
+        <div class="bar"><i id="p-body"></i></div>
+      </div>
+
+      <div class="card" style="--accent:var(--blue)" onclick="go('word')">
+        <span class="badge" id="b-word">10문제</span>
+        <div class="emoji">🔤</div>
+        <h3>초성 · 빈칸</h3>
+        <p>핵심 용어를 초성과 빈칸으로 맞히는 낱말 게임</p>
+        <div class="bar"><i id="p-word"></i></div>
+      </div>
+
+      <div class="card" style="--accent:var(--purple)" onclick="go('cards')">
+        <span class="badge" id="b-cards">기록</span>
+        <div class="emoji">💡</div>
+        <h3>사실 카드 · 독후감</h3>
+        <p>트리비아 카드 뒤집기와 나의 느낀 점 남기기</p>
+        <div class="bar"><i id="p-cards"></i></div>
+      </div>
+    </div>
+
+    <div class="home-foot">
+      기록은 이 기기에 자동으로 저장돼요. 인터넷 없이도 열립니다<br>
+      <span id="resetLink" style="text-decoration:underline;cursor:pointer;color:var(--dim)">기록 처음부터 다시</span>
+    </div>
+  </div>
+
+  <!-- ===== QUIZ ===== -->
+  <div id="quiz" class="screen">
+    <div class="topbar">
+      <button class="backbtn" onclick="go('home')">← 홈</button>
+      <h2>퀴즈 도전</h2>
+      <div class="spacer"></div>
+      <div class="pill" id="quizScore">0점</div>
+    </div>
+    <div id="quizStage"></div>
+  </div>
+
+  <!-- ===== BODY MAP ===== -->
+  <div id="body" class="screen">
+    <div class="topbar">
+      <button class="backbtn" onclick="go('home')">← 홈</button>
+      <h2>인체 지도 탐험</h2>
+      <div class="spacer"></div>
+      <div class="pill" id="bodyCount">0 / 10</div>
+    </div>
+    <div class="bodywrap">
+      <div>
+        <div class="stage" id="bodyStage"></div>
+        <div class="hint-map">기관을 눌러 이야기를 확인하세요. 초록불이 켜지면 발견 완료!</div>
+      </div>
+      <div class="factpop" id="factPop">
+        <div class="placeholder">위 그림에서 몸의 기관을<br>하나 눌러 보세요 👆</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== WORD ===== -->
+  <div id="word" class="screen">
+    <div class="topbar">
+      <button class="backbtn" onclick="go('home')">← 홈</button>
+      <h2>초성 · 빈칸</h2>
+      <div class="spacer"></div>
+      <div class="pill" id="wordScore">0 / 10</div>
+    </div>
+    <div id="wordStage"></div>
+  </div>
+
+  <!-- ===== CARDS + REFLECTION ===== -->
+  <div id="cards" class="screen">
+    <div class="topbar">
+      <button class="backbtn" onclick="go('home')">← 홈</button>
+      <h2>사실 카드 · 독후감</h2>
+      <div class="spacer"></div>
+      <div class="pill" id="cardCount">0 / 8</div>
+    </div>
+    <p style="font-size:13px;color:var(--muted);margin:0 0 12px">카드를 눌러 뒤집어 보세요. 책에서 가장 놀라웠던 사실들이에요.</p>
+    <div class="flipgrid" id="flipGrid"></div>
+
+    <div class="refl">
+      <h3>✍️ 나의 독후감</h3>
+      <div class="prompts">
+        이런 걸 써 보면 좋아요 — 가장 놀라웠던 사실은? · 내 몸을 대하는 태도가 바뀌었나요? · 더 알고 싶어진 기관은? · 별점과 이유는?
+      </div>
+      <div class="stars" id="stars">
+        <span data-v="1">★</span><span data-v="2">★</span><span data-v="3">★</span><span data-v="4">★</span><span data-v="5">★</span>
+      </div>
+      <textarea id="reflText" placeholder="이 책을 읽고 든 생각을 자유롭게 적어 보세요..."></textarea>
+      <div class="saverow">
+        <div class="savestate" id="saveState">아직 저장 안 됨</div>
+        <button class="btn primary" onclick="saveReflection()">저장하기</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+/* ============ DATA ============ */
+const QUIZ = [
+  {t:"mc", q:"영국 왕립화학회가 계산한 '한 사람의 몸을 이루는 재료를 전부 사들이는 값'은 대략 얼마였을까?",
+   o:["약 9천 원","약 96만 원","약 9만 6천 파운드 (한화 1억 5천만 원 안팎)","단돈 5달러"], a:2,
+   e:"책 첫 장의 유명한 이야기예요. 원소 값만 따지면 놀랄 만큼 비싸지만, 정작 그것들을 '살아 있는 사람'으로 조립하는 방법은 아무도 모른다는 점이 핵심입니다."},
+  {t:"mc", q:"우리 몸을 이루는 원소 중 가장 많은 비율(약 61%)을 차지하는 것은?",
+   o:["탄소","산소","수소","질소"], a:1,
+   e:"몸의 대부분은 물이라 산소가 1위, 그다음이 탄소예요. 우리는 사실 '걸어 다니는 물주머니'에 가깝습니다."},
+  {t:"ox", q:"내 몸에 사는 미생물의 수는 내 몸의 세포 수와 맞먹거나 더 많다.",
+   a:true, e:"우리 몸에는 수십조 마리의 미생물이 함께 살아요. '나'라는 존재는 나만의 것이 아니라 거대한 생태계인 셈이죠."},
+  {t:"mc", q:"무게로는 몸의 2%밖에 안 되는 뇌가 쓰는 에너지는 몸 전체의 약 몇 %일까?",
+   o:["약 5%","약 20%","약 40%","약 60%"], a:1,
+   e:"작지만 어마어마한 대식가예요. 가만히 있어도 뇌는 늘 전력으로 돌아가고 있습니다."},
+  {t:"ox", q:"우리 집 먼지의 상당 부분은 사람에게서 떨어져 나온 죽은 피부 조각이다.",
+   a:true, e:"맞아요. 피부는 끊임없이 벗겨지고 새로 나며, 사람은 평생 수 kg에 달하는 피부를 흘리고 삽니다."},
+  {t:"mc", q:"성인의 몸에는 뼈가 모두 몇 개 있을까?",
+   o:["150개","186개","206개","305개"], a:2,
+   e:"아기 때는 300개가 넘지만 자라면서 여러 뼈가 붙어 206개가 됩니다."},
+  {t:"mc", q:"우리 몸의 뼈 206개 중 절반이 넘게 모여 있는 곳은?",
+   o:["척추와 갈비뼈","머리뼈","손과 발","다리뼈"], a:2,
+   e:"손과 발에만 100개가 넘어요. 정교하게 움직여야 하는 곳일수록 뼈가 잘게 나뉘어 있습니다."},
+  {t:"ox", q:"심장은 하루에 약 10만 번, 평생 수십억 번을 쉬지 않고 뛴다.",
+   a:true, e:"단 한 번도 제대로 쉬지 않는 근육이에요. 평생 뿜어내는 피의 양을 상상하면 경이롭습니다."},
+  {t:"mc", q:"폐 속 공기가 닿는 표면을 모두 펼치면 그 넓이는 무엇과 비슷할까?",
+   o:["손바닥","방석 한 장","테니스 코트","축구장"], a:2,
+   e:"폐포가 수억 개나 접혀 있어서, 펼치면 테니스 코트만 한 넓이가 좁은 가슴 안에 들어 있는 셈입니다."},
+  {t:"mc", q:"간이 우리 몸에서 해내는 일의 가짓수는 대략 얼마나 될까?",
+   o:["약 10가지","약 50가지","500가지 이상","단 1가지"], a:2,
+   e:"해독, 저장, 합성 등 500가지가 넘는 일을 하는 만능 화학 공장이에요. 그래서 대체 장기를 만들기가 가장 어렵습니다."},
+  {t:"ox", q:"기네스 기록상 딸꾹질을 가장 오래 한 사람은 60년이 넘도록 딸꾹질을 했다.",
+   a:true, e:"미국의 찰스 오즈번은 무려 68년간 딸꾹질을 했다고 해요. 딸꾹질이 왜 나는지는 아직도 확실히 밝혀지지 않았습니다."},
+  {t:"mc", q:"우리 몸을 이루는 세포의 수는 대략 얼마나 될까?",
+   o:["약 37만 개","약 37억 개","약 37조 개","약 37경 개"], a:2,
+   e:"약 37조 개! 그 세포 하나하나가 각자 맡은 일을 하며 오늘도 나를 살아 있게 합니다."},
+  {t:"ox", q:"인간은 약 1조 가지에 이르는 서로 다른 냄새를 구별할 수 있다는 연구가 있다.",
+   a:true, e:"오랫동안 인간의 후각을 과소평가했지만, 실제로는 어마어마하게 예민하다는 사실이 밝혀졌어요."},
+  {t:"mc", q:"우리 뇌는 무게의 약 몇 %가 물로 이루어져 있을까?",
+   o:["약 30%","약 50%","약 75%","약 95%"], a:2,
+   e:"단단해 보여도 대부분 물이에요. 그래서 뇌는 두개골과 뇌척수액 속에 조심스럽게 떠 있습니다."},
+  {t:"ox", q:"뇌 자체에는 통증을 느끼는 감각 신경이 없어서, 뇌 수술을 깨어 있는 상태로 하기도 한다.",
+   a:true, e:"온몸의 통증을 '해석'하는 뇌이지만, 정작 자기 자신은 아프다고 느끼지 못해요. 그래서 각성 상태 뇌수술이 가능합니다."},
+  {t:"ox", q:"우리 몸은 무게로 따지면 약 60%가 물로 이루어져 있다.",
+   a:true, e:"세포 안팎이 온통 물이에요. 그래서 사람은 며칠만 물을 못 마셔도 위험해집니다."},
+  {t:"mc", q:"우리 몸에서 가장 단단한 조직은 무엇일까?",
+   o:["넓적다리뼈","두개골","치아의 법랑질(에나멜)","손톱"], a:2,
+   e:"뼈보다도 단단한 게 치아 겉면의 법랑질이에요. 다만 한 번 상하면 스스로 되살아나지 못합니다."},
+  {t:"ox", q:"우리가 보는 색과 듣는 소리는 바깥에 그대로 있는 게 아니라, 뇌가 만들어낸 해석이다.",
+   a:true, e:"세상 자체엔 색도 소리도 없어요. 빛과 진동을 받아 뇌가 '색'과 '소리'라는 경험으로 빚어내는 겁니다."},
+  {t:"mc", q:"사람의 피부색을 결정하는 색소의 이름은?",
+   o:["헤모글로빈","멜라닌","엽록소","케라틴"], a:1,
+   e:"멜라닌이 자외선으로부터 몸을 지켜요. 피부색의 차이는 햇빛의 세기에 적응해 온 결과입니다."},
+  {t:"ox", q:"과학자들은 사람이 '왜 잠을 자야 하는가'를 아직 완전히 설명하지 못한다.",
+   a:true, e:"인생의 3분의 1을 쓰는 일인데도 그 근본 이유는 미스터리예요. 다만 잠이 부족하면 몸과 뇌가 크게 망가집니다."},
+  {t:"mc", q:"우리는 하루에 대략 몇 번이나 숨을 쉴까?",
+   o:["약 2천 번","약 2만 번","약 20만 번","약 200만 번"], a:1,
+   e:"거의 의식하지 못한 채 하루 약 2만 번을 들이쉬고 내쉬어요. 평생이면 어마어마한 횟수입니다."},
+  {t:"ox", q:"우리가 느끼는 통증은 다친 부위 자체가 아니라, 결국 뇌가 만들어내는 감각이다.",
+   a:true, e:"그래서 없는 팔이 아픈 '환상통'도 생겨요. 통증은 몸의 경보이지만 그 신호를 완성하는 건 뇌입니다."},
+  {t:"mc", q:"인류를 가장 많이 죽인 감염병 중 하나로, 백신 덕분에 지구에서 완전히 사라진 병은?",
+   o:["결핵","말라리아","천연두","콜레라"], a:2,
+   e:"천연두는 인간이 백신으로 지구에서 없앤 유일한 전염병이에요. 의학이 이룬 가장 위대한 승리로 꼽힙니다."},
+  {t:"ox", q:"면역계가 지나치게 예민하게 반응하면 오히려 알레르기나 자가면역 질환이 생길 수 있다.",
+   a:true, e:"나를 지키는 면역이 나를 공격하기도 해요. 강한 것만이 좋은 게 아니라, 균형이 핵심입니다."},
+  {t:"ox", q:"머리카락과 손톱은 죽은 세포로 이루어져 있어서, 잘라도 아프지 않다.",
+   a:true, e:"자라나는 뿌리는 살아 있지만 밖으로 드러난 부분은 죽은 세포예요. 그래서 이발과 손톱깎기가 아프지 않습니다."}
+];
+
+const ORGANS = [
+  {id:"brain", name:"뇌", em:"🧠", x:100, y:34, r:8,
+   facts:["무게는 약 1.4kg, 몸의 2%에 불과하지만 에너지는 20%나 씁니다.","약 75%가 물이라, 두개골 속 액체에 조심스럽게 떠 있어요.","정작 뇌 자체는 통증을 못 느껴서 깨어 있는 채로 수술하기도 합니다."]},
+  {id:"eye", name:"눈", em:"👁️", x:88, y:52, r:6,
+   facts:["눈이 보내는 정보의 상당 부분은 사실 뇌가 '채워 넣은' 예측이에요.","우리가 보는 세상은 실물이 아니라 뇌가 만든 실시간 해석입니다.","맹점이 있는데도 시야에 구멍이 안 뚫린 건 뇌가 메워 주기 때문이죠."]},
+  {id:"nose", name:"코", em:"👃", x:100, y:58, r:6,
+   facts:["인간은 약 1조 가지의 냄새를 구별할 수 있다는 연구가 있어요.","냄새는 기억, 감정과 곧바로 연결되는 가장 원초적인 감각입니다.","맛의 대부분은 사실 혀가 아니라 코가 결정합니다."]},
+  {id:"mouth", name:"입", em:"👄", x:100, y:66, r:6,
+   facts:["입안에는 수백 종의 미생물이 하나의 도시처럼 살고 있어요.","침은 하루에 무려 1리터 넘게 나오며 소화와 방어를 돕습니다.","치아 법랑질은 몸에서 가장 단단한 조직입니다."]},
+  {id:"lung", name:"폐", em:"🫁", x:75, y:92, r:8,
+   facts:["폐포를 모두 펼치면 테니스 코트만 한 넓이가 됩니다.","숨길을 다 이으면 수천 km에 이른다고 해요.","우리는 하루에 약 2만 번 숨을 쉬면서도 거의 의식하지 못합니다."]},
+  {id:"heart", name:"심장", em:"🫀", x:108, y:96, r:8,
+   facts:["하루 약 10만 번, 평생 수십억 번을 쉬지 않고 뜁니다.","주먹만 한 크기지만 온몸 구석구석으로 피를 밀어냅니다.","혈관을 모두 이으면 지구를 여러 바퀴 돌 만큼 길어요."]},
+  {id:"liver", name:"간", em:"🟤", x:88, y:112, r:8,
+   facts:["해독, 저장, 합성 등 500가지가 넘는 일을 하는 화학 공장입니다.","일부를 잘라내도 다시 자라나는 놀라운 재생력을 가졌어요.","그래서 인공으로 대체하기가 가장 까다로운 장기입니다."]},
+  {id:"stomach", name:"위·장", em:"🌀", x:100, y:126, r:8,
+   facts:["장 속 미생물은 소화뿐 아니라 기분과 면역에도 영향을 줍니다.","소장은 돌돌 말려 있지만 펴면 수 미터에 달해요.","'제2의 뇌'라 불릴 만큼 자체 신경망이 발달해 있습니다."]},
+  {id:"skin", name:"피부", em:"🧴", x:130, y:120, r:7,
+   facts:["몸에서 가장 큰 장기로, 넓이가 약 2제곱미터에 이릅니다.","끊임없이 벗겨지고 새로 나며, 집먼지의 상당 부분이 죽은 피부예요.","평생 벗어내는 피부를 모으면 수 kg에 달합니다."]},
+  {id:"bone", name:"뼈대", em:"🦴", x:70, y:150, r:7,
+   facts:["성인의 뼈는 모두 206개, 절반이 넘게 손과 발에 몰려 있습니다.","뼈는 죽은 막대가 아니라 끊임없이 새로 만들어지는 살아 있는 조직이에요.","가벼우면서도 강철보다 튼튼한 자연의 걸작입니다."]}
+];
+
+const WORDS = [
+  {type:"cho", word:"미생물", cho:"ㅁㅅㅁ", clue:"내 몸에 사는 세포 수와 맞먹을 만큼 많은 작은 생명체"},
+  {type:"cho", word:"피부", cho:"ㅍㅂ", clue:"몸에서 가장 큰 장기. 집먼지의 상당 부분이 이것의 조각"},
+  {type:"fill", before:"성인의 뼈는 모두 ", after:" 개다.", answer:"206", clue:"숫자로 쓰세요"},
+  {type:"cho", word:"심장", cho:"ㅅㅈ", clue:"하루 약 10만 번, 평생 수십억 번 뛰는 근육 펌프"},
+  {type:"fill", before:"간은 우리 몸에서 무려 ", after:"가지가 넘는 일을 한다.", answer:"500", clue:"숫자로 쓰세요 (반올림한 값)"},
+  {type:"cho", word:"산소", cho:"ㅅㅅ", clue:"몸을 이루는 원소 중 약 61%로 가장 많은 것"},
+  {type:"cho", word:"후각", cho:"ㅎㄱ", clue:"약 1조 가지 냄새를 구별하는, 기억과 이어진 감각"},
+  {type:"fill", before:"폐 속 표면을 다 펼치면 ", after:" 코트만 한 넓이가 된다.", answer:"테니스", clue:"운동 종목 이름"},
+  {type:"cho", word:"법랑질", cho:"ㅂㄹㅈ", clue:"치아 겉을 덮은, 몸에서 가장 단단한 조직"},
+  {type:"fill", before:"우리 몸의 세포 수는 대략 ", after:"조 개다.", answer:"37", clue:"숫자 두 자리"},
+  {type:"cho", word:"멜라닌", cho:"ㅁㄹㄴ", clue:"피부색을 결정하고 자외선을 막아 주는 색소"},
+  {type:"cho", word:"천연두", cho:"ㅊㅇㄷ", clue:"백신으로 지구에서 완전히 사라진 유일한 전염병"},
+  {type:"fill", before:"우리 몸은 무게로 약 ", after:"%가 물이다.", answer:"60", clue:"숫자 두 자리"}
+];
+
+const FACTS = [
+  {em:"💰", q:"내 몸을 재료로 사면 얼마?", num:"약 1억 5천만 원", a:"왕립화학회 계산으론 원소 값만 9만 6천 파운드 안팎. 그런데 그걸 '살아 있는 사람'으로 만드는 법은 아무도 모릅니다."},
+  {em:"🔬", q:"내 안에 사는 세입자는?", num:"수십조 마리", a:"미생물의 수가 내 세포 수와 맞먹어요. 나는 하나의 개체가 아니라 거대한 생태계입니다."},
+  {em:"🧠", q:"뇌가 쓰는 에너지 비율은?", num:"약 20%", a:"무게는 2%인데 에너지는 20%. 가만히 있어도 뇌는 늘 전력 질주 중입니다."},
+  {em:"🫀", q:"심장은 하루에 몇 번 뛸까?", num:"약 10만 번", a:"단 한 번도 제대로 쉬지 않아요. 혈관을 다 이으면 지구를 여러 바퀴 돌 길이입니다."},
+  {em:"🫁", q:"폐를 다 펼치면?", num:"테니스 코트 넓이", a:"수억 개의 폐포가 접혀 있어서, 펼치면 코트만 한 넓이가 가슴속에 들어 있습니다."},
+  {em:"🦴", q:"뼈 절반이 모인 곳은?", num:"손과 발", a:"206개 중 100개 넘게 손발에 있어요. 정교하게 움직일수록 뼈가 잘게 나뉩니다."},
+  {em:"👃", q:"인간이 맡는 냄새 가짓수는?", num:"약 1조 가지", a:"오래 과소평가됐던 후각. 실제론 놀랄 만큼 예민하고, 기억과 곧바로 연결됩니다."},
+  {em:"⏳", q:"최장 딸꾹질 기록은?", num:"68년", a:"찰스 오즈번의 기록이에요. 딸꾹질이 왜 나는지는 아직도 완전히 밝혀지지 않았습니다."},
+  {em:"🎨", q:"바깥세상에 정말 '색'이 있을까?", num:"뇌가 만든 해석", a:"세상엔 빛의 파장만 있을 뿐, 색과 소리는 뇌가 빚어낸 경험이에요. 우리는 저마다의 세계를 살고 있는 셈입니다."},
+  {em:"💉", q:"인간이 지구에서 없앤 전염병은?", num:"천연두", a:"수억 명을 죽인 병을 백신으로 완전히 몰아냈어요. 의학 역사상 가장 위대한 승리로 꼽힙니다."},
+  {em:"😴", q:"우리는 왜 잠을 잘까?", num:"아직 미스터리", a:"인생의 3분의 1을 쓰면서도 근본 이유는 몰라요. 다만 잠이 부족하면 몸과 뇌가 빠르게 무너집니다."},
+  {em:"🧬", q:"내 DNA를 다 이으면 얼마나 길까?", num:"태양계 밖까지", a:"세포 하나에 든 DNA만 2m, 온몸의 것을 이으면 상상하기 힘든 길이가 됩니다."}
+];
+
+/* ============ STATE ============ */
+const KEY = "bodyBrysonActivity_v1";
+let S = load();
+function load(){ try{return JSON.parse(localStorage.getItem(KEY))||{}}catch(e){return{}} }
+function persist(){ localStorage.setItem(KEY, JSON.stringify(S)); refreshHome(); }
+S.quizBest = S.quizBest ?? null;
+S.foundOrgans = S.foundOrgans ?? [];
+S.wordSolved = S.wordSolved ?? [];
+S.flipped = S.flipped ?? [];
+S.reflText = S.reflText ?? "";
+S.stars = S.stars ?? 0;
+
+/* ============ NAV ============ */
+function go(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0,0);
+  if(id==='quiz') startQuiz();
+  if(id==='body') buildBody();
+  if(id==='word') buildWords();
+  if(id==='cards') buildCards();
+  if(id==='home') refreshHome();
+}
+
+/* ============ HOME PROGRESS ============ */
+function refreshHome(){
+  const quizDone = S.quizBest!==null;
+  const bodyN = S.foundOrgans.length, bodyDone = bodyN>=ORGANS.length;
+  const wordN = S.wordSolved.length, wordDone = wordN>=WORDS.length;
+  const cardsDone = (S.reflText && S.reflText.trim().length>0);
+
+  setBar('p-quiz', quizDone?100:0);
+  setBar('p-body', bodyN/ORGANS.length*100);
+  setBar('p-word', wordN/WORDS.length*100);
+  setBar('p-cards', cardsDone?100:(S.flipped.length/FACTS.length*100));
+
+  badge('b-quiz', quizDone?`최고 ${S.quizBest}점`:`${QUIZ.length}문항`, quizDone);
+  badge('b-body', bodyDone?'완료!':`${bodyN}/${ORGANS.length}`, bodyDone);
+  badge('b-word', wordDone?'완료!':`${wordN}/${WORDS.length}`, wordDone);
+  badge('b-cards', cardsDone?'작성됨':'기록', cardsDone);
+
+  const done = [quizDone,bodyDone,wordDone,cardsDone].filter(Boolean).length;
+  document.getElementById('homeFill').style.width = (done/4*100)+'%';
+  document.getElementById('homeLab').textContent =
+    done===4 ? '🎉 네 가지 활동을 모두 마쳤어요! 훌륭해요' : `4가지 활동 중 ${done}개 완료`;
+}
+function setBar(id,pct){ const el=document.getElementById(id); if(el) el.style.width=Math.min(100,pct)+'%'; }
+function badge(id,txt,done){ const el=document.getElementById(id); if(!el)return; el.textContent=txt; el.classList.toggle('done',!!done); }
+
+/* ============ QUIZ ============ */
+let qi=0, qscore=0;
+function startQuiz(){ qi=0; qscore=0; document.getElementById('quizScore').textContent='0점'; renderQ(); }
+function renderQ(){
+  const q=QUIZ[qi];
+  const stage=document.getElementById('quizStage');
+  let optHtml='';
+  if(q.t==='ox'){
+    optHtml=`<div class="opts ox-opts">
+      <button class="opt" onclick="answer(this,true)">⭕<br><span style="font-size:13px">맞아요</span></button>
+      <button class="opt" onclick="answer(this,false)">❌<br><span style="font-size:13px">아니에요</span></button></div>`;
+  }else{
+    const keys=['A','B','C','D'];
+    optHtml='<div class="opts">'+q.o.map((o,i)=>
+      `<button class="opt" onclick="answer(this,${i})"><span class="k">${keys[i]}</span><span>${o}</span></button>`).join('')+'</div>';
+  }
+  stage.innerHTML=`
+    <div class="qcard">
+      <div class="qmeta">
+        <span>문제 ${qi+1} / ${QUIZ.length}</span>
+        <span class="qtype ${q.t}">${q.t==='ox'?'O · X':'객관식'}</span>
+      </div>
+      <div class="qtext">${q.q}</div>
+      ${optHtml}
+      <div class="explain" id="exp"></div>
+      <button class="nextbtn" id="nextBtn" onclick="nextQ()">${qi<QUIZ.length-1?'다음 문제 →':'결과 보기 🎉'}</button>
+    </div>`;
+}
+function answer(btn,val){
+  const q=QUIZ[qi];
+  const correct = (q.t==='ox') ? (val===q.a) : (val===q.a);
+  document.querySelectorAll('#quizStage .opt').forEach((el,i)=>{
+    el.classList.add('disabled');
+    if(q.t!=='ox'){ if(i===q.a) el.classList.add('correct'); }
+  });
+  if(q.t==='ox'){
+    const btns=document.querySelectorAll('#quizStage .opt');
+    // index 0 = true(맞아요), 1 = false
+    const correctIdx = q.a?0:1;
+    btns[correctIdx].classList.add('correct');
+    if(!correct) btn.classList.add('wrong');
+  }else{
+    if(!correct) btn.classList.add('wrong');
+  }
+  if(correct){ qscore+=10; document.getElementById('quizScore').textContent=qscore+'점'; }
+  const exp=document.getElementById('exp');
+  exp.innerHTML = (correct?'<b>정답! ✅ </b>':'<b>아쉬워요 💡 </b>')+q.e;
+  exp.classList.add('show');
+  document.getElementById('nextBtn').classList.add('show');
+}
+function nextQ(){
+  if(qi<QUIZ.length-1){ qi++; renderQ(); window.scrollTo(0,0); }
+  else showResult();
+}
+function showResult(){
+  if(S.quizBest===null || qscore>S.quizBest){ S.quizBest=qscore; persist(); }
+  const max=QUIZ.length*10;
+  const pct=qscore/max*100;
+  let grade,msg;
+  if(pct>=90){grade='🏆';msg='인체 박사님! 책을 완벽히 소화했어요.';}
+  else if(pct>=70){grade='🥇';msg='훌륭해요! 핵심을 제대로 기억하고 있네요.';}
+  else if(pct>=50){grade='🥈';msg='좋아요. 몇 장면만 다시 떠올리면 완벽!';}
+  else{grade='🥉';msg='괜찮아요. 사실 카드를 보고 다시 도전해 봐요.';}
+  if(pct>=70) burst();
+  document.getElementById('quizStage').innerHTML=`
+    <div class="result">
+      <div class="grade">${grade}</div>
+      <div class="big">${qscore}<span style="font-size:20px;color:var(--muted)">/${max}점</span></div>
+      <div class="msg">${msg}<br><span style="font-size:12px">최고 기록 ${S.quizBest}점</span></div>
+      <div class="row">
+        <button class="btn" onclick="go('home')">홈으로</button>
+        <button class="btn primary" onclick="startQuiz()">다시 도전</button>
+      </div>
+    </div>`;
+}
+
+/* ============ BODY MAP ============ */
+function buildBody(){
+  const stage=document.getElementById('bodyStage');
+  const dots=ORGANS.map(o=>{
+    const found=S.foundOrgans.includes(o.id);
+    return `<g class="organ ${found?'found':''}" onclick="showOrgan('${o.id}')">
+      <circle class="dot ${found?'':'dotpulse'}" cx="${o.x}" cy="${o.y}" r="${o.r}"></circle>
+      <text class="organlabel" x="${o.x+ (o.x>100?11:-11)}" y="${o.y+4}" text-anchor="${o.x>100?'start':'end'}">${o.em}</text>
+    </g>`;
+  }).join('');
+  stage.innerHTML=`
+    <svg viewBox="0 0 200 200" width="100%" style="max-width:340px">
+      <!-- 몸 실루엣 -->
+      <g fill="#243040" stroke="#31415a" stroke-width="1.5">
+        <circle cx="100" cy="42" r="20"/>
+        <rect x="94" y="60" width="12" height="10"/>
+        <path d="M70 74 Q100 66 130 74 L138 130 Q120 138 100 138 Q80 138 62 130 Z"/>
+        <rect x="82" y="135" width="14" height="52" rx="6"/>
+        <rect x="104" y="135" width="14" height="52" rx="6"/>
+        <rect x="60" y="78" width="10" height="46" rx="5"/>
+        <rect x="130" y="78" width="10" height="46" rx="5"/>
+      </g>
+      ${dots}
+    </svg>`;
+  updateBodyCount();
+}
+function showOrgan(id){
+  const o=ORGANS.find(x=>x.id===id);
+  if(!S.foundOrgans.includes(id)){ S.foundOrgans.push(id); persist(); }
+  document.querySelector(`.organ[onclick*="'${id}'"]`)?.classList.add('found');
+  document.querySelector(`.organ[onclick*="'${id}'"] .dot`)?.classList.remove('dotpulse');
+  const pop=document.getElementById('factPop');
+  pop.innerHTML=`
+    <div class="ttl"><span class="em">${o.em}</span>${o.name}</div>
+    <ul class="body">${o.facts.map(f=>`<li>${f}</li>`).join('')}</ul>`;
+  updateBodyCount();
+  if(S.foundOrgans.length===ORGANS.length){
+    setTimeout(()=>{ toast('🎉 모든 기관을 발견했어요!'); burst(); },300);
+  }
+}
+function updateBodyCount(){
+  document.getElementById('bodyCount').textContent=`${S.foundOrgans.length} / ${ORGANS.length}`;
+}
+
+/* ============ WORDS ============ */
+let wi=0;
+function buildWords(){ wi=0; renderWord(); }
+function renderWord(){
+  const w=WORDS[wi];
+  const solved=S.wordSolved.includes(wi);
+  document.getElementById('wordScore').textContent=`${S.wordSolved.length} / ${WORDS.length}`;
+  const stage=document.getElementById('wordStage');
+  let inner='';
+  if(w.type==='cho'){
+    inner=`<div class="choseong">${w.cho}</div>
+           <div class="clue">${w.clue}</div>`;
+  }else{
+    inner=`<div class="fillsentence">${w.before}<span class="blank" id="blankSpot">?</span>${w.after}</div>
+           <div class="clue">${w.clue}</div>`;
+  }
+  stage.innerHTML=`
+    <div class="qmeta" style="padding:0 4px 8px;color:var(--muted);font-size:12px">
+      <span>${wi+1} / ${WORDS.length}</span>
+      <span>${w.type==='cho'?'초성 맞히기':'빈칸 채우기'}</span>
+    </div>
+    <div class="initcard">
+      ${inner}
+      <input class="answerbox" id="wordInput" placeholder="정답 입력" autocomplete="off"
+        onkeydown="if(event.key==='Enter')checkWord()" ${solved?'value="'+answerOf(w)+'" disabled':''}>
+      <div class="ifeedback ${solved?'ok':''}" id="wordFb">${solved?'맞았어요! ✅':''}</div>
+      <button class="revealbtn" onclick="revealWord()">정답 살짝 보기</button>
+      <div style="display:flex;gap:10px;margin-top:16px">
+        <button class="btn" style="flex:1" onclick="prevWord()" ${wi===0?'disabled style="opacity:.4;flex:1"':''}>← 이전</button>
+        <button class="btn primary" style="flex:1" onclick="checkWord()">확인</button>
+        <button class="btn" style="flex:1" onclick="nextWord()">${wi<WORDS.length-1?'다음 →':'끝내기'}</button>
+      </div>
+    </div>`;
+  if(!solved) setTimeout(()=>document.getElementById('wordInput')?.focus(),100);
+}
+function answerOf(w){ return w.type==='cho'?w.word:w.answer; }
+function norm(s){ return (s||'').replace(/\s+/g,'').toLowerCase(); }
+function checkWord(){
+  const w=WORDS[wi];
+  const input=document.getElementById('wordInput');
+  const fb=document.getElementById('wordFb');
+  if(norm(input.value)===norm(answerOf(w))){
+    fb.textContent='맞았어요! ✅'; fb.className='ifeedback ok';
+    input.disabled=true;
+    if(!S.wordSolved.includes(wi)){ S.wordSolved.push(wi); persist(); }
+    document.getElementById('wordScore').textContent=`${S.wordSolved.length} / ${WORDS.length}`;
+    const bl=document.getElementById('blankSpot'); if(bl) bl.textContent=answerOf(w);
+    if(S.wordSolved.length===WORDS.length){ setTimeout(()=>{toast('🎉 낱말 게임 완료!');burst();},250); }
+    else setTimeout(nextWord,700);
+  }else{
+    fb.textContent='다시 한 번! ❌'; fb.className='ifeedback no';
+    input.style.borderColor='var(--red)';
+    setTimeout(()=>input.style.borderColor='',600);
+  }
+}
+function revealWord(){
+  const w=WORDS[wi];
+  const fb=document.getElementById('wordFb');
+  fb.textContent='정답: '+answerOf(w); fb.className='ifeedback';
+  fb.style.color='var(--gold)';
+}
+function nextWord(){ if(wi<WORDS.length-1){wi++;renderWord();window.scrollTo(0,0);} else go('home'); }
+function prevWord(){ if(wi>0){wi--;renderWord();window.scrollTo(0,0);} }
+
+/* ============ CARDS ============ */
+function buildCards(){
+  const grid=document.getElementById('flipGrid');
+  grid.innerHTML=FACTS.map((f,i)=>`
+    <div class="flip ${S.flipped.includes(i)?'flipped':''}" onclick="flipCard(${i},this)">
+      <div class="flipinner">
+        <div class="flipface flipfront">
+          <div class="em">${f.em}</div>
+          <div class="q">${f.q}</div>
+          <div class="tap">눌러서 확인 →</div>
+        </div>
+        <div class="flipface flipback">
+          <div class="num">${f.num}</div>
+          <div class="a">${f.a}</div>
+        </div>
+      </div>
+    </div>`).join('');
+  updateCardCount();
+  // reflection restore
+  document.getElementById('reflText').value=S.reflText||'';
+  paintStars(S.stars||0);
+  if(S.reflText && S.reflText.trim()){
+    document.getElementById('saveState').textContent='저장됨 ✓';
+    document.getElementById('saveState').className='savestate saved';
+  }
+}
+function flipCard(i,el){
+  el.classList.toggle('flipped');
+  if(!S.flipped.includes(i)){ S.flipped.push(i); persist(); updateCardCount(); }
+}
+function updateCardCount(){
+  document.getElementById('cardCount').textContent=`${S.flipped.length} / ${FACTS.length}`;
+}
+/* stars */
+let hoverStars=0;
+const starEls=[...document.querySelectorAll('#stars span')];
+starEls.forEach(s=>{
+  s.addEventListener('click',()=>{ S.stars=+s.dataset.v; persist(); paintStars(S.stars); });
+});
+function paintStars(n){ starEls.forEach(s=>s.classList.toggle('on',+s.dataset.v<=n)); }
+function saveReflection(){
+  S.reflText=document.getElementById('reflText').value;
+  persist();
+  const st=document.getElementById('saveState');
+  st.textContent='저장됨 ✓ '+ (S.reflText.trim()?'('+S.reflText.trim().length+'자)':''); st.className='savestate saved';
+  toast('독후감을 저장했어요 💾');
+}
+
+/* ============ FX ============ */
+let toastT;
+function toast(msg){
+  const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show');
+  clearTimeout(toastT); toastT=setTimeout(()=>t.classList.remove('show'),2200);
+}
+function burst(){
+  const colors=['#e5484d','#f2b705','#2ecc71','#4dabf7','#9775fa','#ff6b6b'];
+  for(let i=0;i<40;i++){
+    const c=document.createElement('div'); c.className='confetti';
+    c.style.left=Math.random()*100+'vw';
+    c.style.background=colors[i%colors.length];
+    c.style.transform=`rotate(${Math.random()*360}deg)`;
+    document.body.appendChild(c);
+    const dur=1200+Math.random()*1200, x=(Math.random()-0.5)*200;
+    c.animate([{transform:`translate(0,0) rotate(0deg)`,opacity:1},
+               {transform:`translate(${x}px,${window.innerHeight+40}px) rotate(${720*Math.random()}deg)`,opacity:.9}],
+      {duration:dur,easing:'cubic-bezier(.2,.6,.4,1)'});
+    setTimeout(()=>c.remove(),dur);
+  }
+}
+
+/* reset */
+document.getElementById('resetLink').onclick=()=>{
+  if(confirm('모든 기록을 지우고 처음부터 시작할까요?')){
+    localStorage.removeItem(KEY);
+    S={quizBest:null,foundOrgans:[],wordSolved:[],flipped:[],reflText:"",stars:0};
+    refreshHome(); toast('기록을 초기화했어요');
+  }
+};
+
+/* init */
+refreshHome();
+</script>
+</body>
+</html>
