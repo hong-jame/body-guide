@@ -251,6 +251,22 @@
   .randombtn{margin-top:10px;background:linear-gradient(90deg,var(--gold),var(--red2));border:none;color:#2a1000;font-weight:900;font-size:14px;padding:11px 18px;border-radius:12px;cursor:pointer}
   .randombtn:active{transform:scale(.97)}
 
+  /* ---------- Match game ---------- */
+  .matchwrap{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .matchcol{display:flex;flex-direction:column;gap:9px}
+  .matchitem{background:var(--panel2);border:1.5px solid var(--line);border-radius:12px;padding:12px 11px;font-size:13px;font-weight:700;
+    cursor:pointer;transition:.15s;min-height:58px;display:flex;align-items:center;line-height:1.35;color:var(--ink)}
+  .matchitem:active{transform:scale(.97)}
+  .matchitem.sel{border-color:var(--blue);background:rgba(77,171,247,.16);box-shadow:0 0 0 2px rgba(77,171,247,.25)}
+  .matchitem.done{border-color:var(--green);background:rgba(46,204,113,.14);color:#8fe0af;pointer-events:none;opacity:.85}
+  .matchitem.wrong{border-color:var(--red);background:rgba(229,72,77,.16);animation:shake .35s}
+  @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+  .matchcol-t{font-size:11px;font-weight:800;color:var(--dim);text-align:center;margin-bottom:2px;letter-spacing:1px}
+  .matchresult{margin-top:16px;text-align:center;background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:20px;box-shadow:var(--shadow);animation:fade .4s}
+  .matchresult .rg{font-size:40px}
+  .matchresult .rt{font-size:16px;font-weight:800;margin:6px 0 4px}
+  .matchresult .rs{font-size:13px;color:var(--muted);margin-bottom:14px}
+
   /* ---------- Quote note ---------- */
   .quotebox{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:18px;box-shadow:var(--shadow);margin-top:16px}
   .quotebox h3{margin:0 0 4px;font-size:16px}
@@ -323,6 +339,14 @@
         <h3>진짜? 가짜?</h3>
         <p>몸에 얽힌 소문의 진실을 가려내는 판별 게임</p>
         <div class="bar"><i id="p-tf"></i></div>
+      </div>
+
+      <div class="card" style="--accent:var(--blue)" onclick="go('match')">
+        <span class="badge" id="b-match">연결</span>
+        <div class="emoji">🔗</div>
+        <h3>의학사 인물 연결</h3>
+        <p>몸을 밝혀낸 인물과 그 업적을 짝지어 보세요</p>
+        <div class="bar"><i id="p-match"></i></div>
       </div>
 
       <div class="card" style="--accent:var(--purple)" onclick="go('cards')">
@@ -415,6 +439,22 @@
       <div class="pill" id="tfScore">0 / 10</div>
     </div>
     <div id="tfStage"></div>
+  </div>
+
+  <!-- ===== MATCH ===== -->
+  <div id="match" class="screen">
+    <div class="topbar">
+      <button class="backbtn" onclick="go('home')">← 홈</button>
+      <h2>의학사 인물 연결</h2>
+      <div class="spacer"></div>
+      <div class="pill" id="matchCount">0 / 8</div>
+    </div>
+    <p style="font-size:13px;color:var(--muted);margin:0 0 12px">왼쪽 인물을 누르고, 오른쪽에서 그 업적을 눌러 짝지으세요.</p>
+    <div class="matchwrap">
+      <div class="matchcol" id="matchLeft"></div>
+      <div class="matchcol" id="matchRight"></div>
+    </div>
+    <div id="matchDoneBox"></div>
   </div>
 
   <!-- ===== CARDS + REFLECTION ===== -->
@@ -641,7 +681,47 @@ const QUIZ = [
    e:"몸의 나쁜 피를 빼면 낫는다는 믿음으로 사혈이 성행했어요. 실제로는 환자를 더 약하게 만들었죠. 의학의 역사에는 도움보다 해가 된 치료도 많았습니다."},
   {t:"mc", lv:3, q:"마취제가 널리 쓰이기 전, 외과 수술에서 의사에게 가장 중요하게 여겨진 능력은?",
    o:["정교함","빠른 속도","청결","친절함"], a:1,
-   e:"마취가 없던 시절엔 환자가 극심한 고통을 견뎌야 했기에, 수술을 빨리 끝내는 속도가 최고의 미덕이었어요. 1분 안에 다리를 자르는 외과의가 명의로 불리던 시대였습니다."}
+   e:"마취가 없던 시절엔 환자가 극심한 고통을 견뎌야 했기에, 수술을 빨리 끝내는 속도가 최고의 미덕이었어요. 1분 안에 다리를 자르는 외과의가 명의로 불리던 시대였습니다."},
+
+  /* ===== 확장 2차: 보통(lv1) ===== */
+  {t:"ox", q:"우리는 생생한 꿈을 주로 '렘(REM)수면'이라 불리는 얕은 잠 단계에서 꾼다.",
+   a:true, e:"진짜예요. 렘수면 때는 눈동자가 빠르게 움직이고 뇌가 깨어 있을 때처럼 활발해져요. 그래서 이 단계에서 가장 또렷한 꿈을 꿉니다."},
+  {t:"mc", q:"우리 몸에서 가장 부지런한 근육으로, 하루에 10만 번 넘게 수축하며 평생 쉬지 않는 것은?",
+   o:["눈 근육","심장(심근)","다리 근육","혀"], a:1,
+   e:"심장은 특별한 근육(심근)으로 되어 있어 스스로 리듬을 만들어 뛰어요. 평생 단 한 번의 긴 휴식도 없이 일하는, 몸에서 가장 성실한 근육입니다."},
+  {t:"ox", q:"귀는 소리를 듣는 일뿐 아니라, 우리 몸의 균형을 잡는 일도 함께 맡는다.",
+   a:true, e:"진짜예요. 속귀의 반고리관이 머리의 움직임과 기울기를 감지해요. 빙글빙글 돌면 어지러운 것도 이 균형 장치가 흔들리기 때문입니다."},
+  {t:"mc", q:"상처가 났을 때 피를 굳혀 딱지를 만들어 피를 멈추게 하는, 피 속의 작은 조각은?",
+   o:["적혈구","백혈구","혈소판","헤모글로빈"], a:2,
+   e:"혈소판이 상처 부위에 달라붙어 그물을 만들고 피를 굳혀요. 이 정교한 응고 장치 덕분에 작은 상처에도 피가 끝없이 흐르지 않습니다."},
+
+  /* ===== 확장 2차: 어려움(lv2) ===== */
+  {t:"mc", lv:2, q:"신경을 타고 전달되는 신호의 가장 빠른 속도는 대략 얼마나 될까?",
+   o:["초속 1m","초속 10m","초속 100m가 넘는다(시속 약 400km)","빛의 속도"], a:2,
+   e:"가장 빠른 신경 신호는 초속 100m가 넘어요. 뜨거운 것에 손을 대자마자 움찔하는 것도, 이 번개 같은 속도로 신호가 오가기 때문입니다."},
+  {t:"mc", lv:2, q:"우리 몸에서 세포가 가장 빠르게 새것으로 교체되는 곳 중 하나는?",
+   o:["창자(장) 안쪽 벽","넓적다리뼈","뇌","심장"], a:0,
+   e:"거친 음식과 강한 소화액에 시달리는 장 안쪽 벽은 며칠마다 통째로 새로 만들어져요. 반대로 뇌의 신경세포는 대부분 평생 함께합니다."},
+  {t:"mc", lv:2, q:"적혈구 하나가 만들어져 수명을 다할 때까지 몸속에서 일하는 기간은 대략?",
+   o:["약 하루","약 1주일","약 120일(넉 달)","약 10년"], a:2,
+   e:"적혈구는 약 120일을 일하고 지라(비장)에서 분해돼요. 그동안 온몸을 수십만 번 돌며 쉼 없이 산소를 실어 나릅니다."},
+  {t:"mc", lv:2, q:"우리 몸의 골수는 지금 이 순간에도 새 적혈구를 얼마나 빠르게 만들어낼까?",
+   o:["매초 약 20개","매초 약 2천 개","매초 약 200만 개","한 달에 1개"], a:2,
+   e:"매초 약 200만 개! 잃는 만큼 끊임없이 새로 채워 넣기에, 몸속 적혈구 수가 늘 일정하게 유지됩니다."},
+
+  /* ===== 확장 2차: 전문가(lv3) ===== */
+  {t:"mc", lv:3, q:"1967년 세계 최초로 사람의 심장 이식 수술에 성공한 남아프리카공화국의 외과의는?",
+   o:["마이클 드베이키","크리스티안 바너드","노먼 셤웨이","드니 파팽"], a:1,
+   e:"바너드가 이룬 첫 심장 이식은 온 세계를 놀라게 했어요. 비록 첫 환자는 오래 살지 못했지만, 이 도전이 오늘날 수많은 이식 수술의 문을 열었습니다."},
+  {t:"mc", lv:3, q:"오늘날 아스피린의 바탕이 된 진통 성분은 원래 어떤 식물에서 얻었을까?",
+   o:["양귀비","버드나무 껍질","코카나무","키나나무"], a:1,
+   e:"버드나무 껍질의 성분(살리신)이 통증과 열을 다스린다는 건 아주 오래전부터 알려졌어요. 이것을 다듬어 만든 것이 인류가 가장 많이 먹는 약, 아스피린입니다."},
+  {t:"mc", lv:3, q:"'위궤양은 스트레스가 아니라 세균 때문'임을, 직접 그 세균을 삼켜 증명해 낸 과학자는?",
+   o:["로베르트 코흐","배리 마셜","파울 에를리히","알렉산더 플레밍"], a:1,
+   e:"마셜은 아무도 믿지 않자 헬리코박터균을 스스로 마셔 위염을 일으켜 증명했어요. 이 무모하면서도 대담한 실험으로 훗날 노벨상을 받았습니다."},
+  {t:"mc", lv:3, q:"1918년, 제1차 세계대전의 전사자보다 더 많은 수천만 명의 목숨을 앗아간 대유행병은?",
+   o:["흑사병","스페인 독감","콜레라","천연두"], a:1,
+   e:"흔히 '스페인 독감'이라 불린 인플루엔자 대유행이에요. 특히 건강한 젊은이들까지 쓰러뜨려, 감염병이 얼마나 무서운지를 온 인류에게 각인시켰습니다."}
 ];
 
 const ORGANS = [
@@ -664,7 +744,13 @@ const ORGANS = [
   {id:"skin", name:"피부", em:"🧴", x:130, y:120, r:7,
    facts:["몸에서 가장 큰 장기로, 넓이가 약 2제곱미터에 이릅니다.","끊임없이 벗겨지고 새로 나며, 집먼지의 상당 부분이 죽은 피부예요.","평생 벗어내는 피부를 모으면 수 kg에 달합니다."]},
   {id:"bone", name:"뼈대", em:"🦴", x:70, y:150, r:7,
-   facts:["성인의 뼈는 모두 206개, 절반이 넘게 손과 발에 몰려 있습니다.","뼈는 죽은 막대가 아니라 끊임없이 새로 만들어지는 살아 있는 조직이에요.","가벼우면서도 강철보다 튼튼한 자연의 걸작입니다."]}
+   facts:["성인의 뼈는 모두 206개, 절반이 넘게 손과 발에 몰려 있습니다.","뼈는 죽은 막대가 아니라 끊임없이 새로 만들어지는 살아 있는 조직이에요.","가벼우면서도 강철보다 튼튼한 자연의 걸작입니다."]},
+  {id:"ear", name:"귀", em:"👂", x:80, y:40, r:5,
+   facts:["몸에서 가장 작은 뼈(등자뼈)가 이 안에 들어 있어요.","소리를 듣는 일뿐 아니라 몸의 균형을 잡는 일도 맡습니다.","빙글빙글 돌면 어지러운 건 속귀의 균형 장치가 흔들리기 때문이에요."]},
+  {id:"kidney", name:"콩팥", em:"🫘", x:114, y:120, r:6,
+   facts:["피를 걸러 노폐물을 오줌으로 내보내는 한 쌍의 정수기예요.","하루에도 온몸의 피를 수십 번씩 반복해 걸러냅니다.","몸속 물과 소금의 균형을 잡는 섬세한 조절자입니다."]},
+  {id:"muscle", name:"근육", em:"💪", x:60, y:96, r:6,
+   facts:["가장 부지런한 근육은 심장으로, 평생 쉬지 않고 뜁니다.","매운맛을 느끼는 건 미각이 아니라 통증에 가까운 자극이에요.","근육은 쓸수록 굵어지고, 안 쓰면 빠르게 약해집니다."]}
 ];
 
 const WORDS = [
@@ -686,7 +772,10 @@ const WORDS = [
   {type:"fill", before:"곰팡이에서 페니실린을 발견한 사람은 알렉산더 ", after:"이다.", answer:"플레밍", clue:"인물 이름(성)"},
   {type:"cho", word:"콩팥", cho:"ㅋㅍ", clue:"피를 걸러 노폐물을 오줌으로 내보내는 한 쌍의 기관(=신장)"},
   {type:"cho", word:"괴혈병", cho:"ㄱㅎㅂ", clue:"비타민C 부족으로 대항해시대 뱃사람들을 괴롭힌 병"},
-  {type:"fill", before:"기본 맛 다섯 가지는 단맛·짠맛·신맛·쓴맛, 그리고 ", after:"이다.", answer:"감칠맛", clue:"우마미라고도 한다"}
+  {type:"fill", before:"기본 맛 다섯 가지는 단맛·짠맛·신맛·쓴맛, 그리고 ", after:"이다.", answer:"감칠맛", clue:"우마미라고도 한다"},
+  {type:"cho", word:"혈소판", cho:"ㅎㅅㅍ", clue:"상처에 달라붙어 딱지를 만들고 피를 멈추게 하는 피 속 조각"},
+  {type:"cho", word:"인슐린", cho:"ㅇㅅㄹ", clue:"이자에서 나와 핏속 당(혈당)을 낮추는 호르몬"},
+  {type:"fill", before:"세계 최초로 심장 이식에 성공한 의사는 크리스티안 ", after:"다.", answer:"바너드", clue:"인물 이름(성)"}
 ];
 
 const FACTS = [
@@ -701,7 +790,11 @@ const FACTS = [
   {em:"🎨", q:"바깥세상에 정말 '색'이 있을까?", num:"뇌가 만든 해석", a:"세상엔 빛의 파장만 있을 뿐, 색과 소리는 뇌가 빚어낸 경험이에요. 우리는 저마다의 세계를 살고 있는 셈입니다."},
   {em:"💉", q:"인간이 지구에서 없앤 전염병은?", num:"천연두", a:"수억 명을 죽인 병을 백신으로 완전히 몰아냈어요. 의학 역사상 가장 위대한 승리로 꼽힙니다."},
   {em:"😴", q:"우리는 왜 잠을 잘까?", num:"아직 미스터리", a:"인생의 3분의 1을 쓰면서도 근본 이유는 몰라요. 다만 잠이 부족하면 몸과 뇌가 빠르게 무너집니다."},
-  {em:"🧬", q:"내 DNA를 다 이으면 얼마나 길까?", num:"태양계 밖까지", a:"세포 하나에 든 DNA만 2m, 온몸의 것을 이으면 상상하기 힘든 길이가 됩니다."}
+  {em:"🧬", q:"내 DNA를 다 이으면 얼마나 길까?", num:"태양계 밖까지", a:"세포 하나에 든 DNA만 2m, 온몸의 것을 이으면 상상하기 힘든 길이가 됩니다."},
+  {em:"🫀", q:"첫 심장 이식은 언제 성공했을까?", num:"1967년", a:"바너드가 세계 최초로 사람의 심장을 이식했어요. 불가능해 보이던 일이 현실이 되며 이식 의학의 시대가 열렸습니다."},
+  {em:"🧫", q:"위궤양이 세균 탓임을 어떻게 증명했나?", num:"직접 삼켜서", a:"배리 마셜은 아무도 안 믿자 헬리코박터균을 스스로 마셔 증명했어요. 이 대담한 자가 실험으로 노벨상을 받았습니다."},
+  {em:"🌿", q:"아스피린은 원래 어디서 왔을까?", num:"버드나무 껍질", a:"버드나무 껍질이 통증과 열을 다스린다는 건 오래전부터 알려졌어요. 그 성분을 다듬은 것이 인류가 가장 많이 먹는 약입니다."},
+  {em:"👶", q:"아이의 세포가 엄마 몸에 남는다고?", num:"수십 년 동안", a:"임신 중 넘어간 태아의 세포가 어머니 몸 곳곳에 오래 머물러요. '미세 키메라'라 불리는, 놀랍고 뭉클한 현상입니다."}
 ];
 
 /* 내 몸 숫자: 하루 기준 값으로 나이에 곱해 계산 */
@@ -752,7 +845,15 @@ const TF = [
   {claim:"임신 중 태아의 세포 일부가 어머니 몸에 넘어가, 수십 년 동안 함께 살아가기도 한다.", real:true,
    e:"진짜예요. '미세 키메라 현상'이라고 해요. 아이의 세포가 엄마 몸 곳곳에 남아 오래도록 함께한다는, 놀랍고도 뭉클한 사실입니다."},
   {claim:"사람의 눈은 약 1천만 가지에 이르는 색을 구별할 수 있다고 여겨진다.", real:true,
-   e:"진짜예요. 세 종류의 색 감지 세포가 만드는 조합 덕분에, 우리는 미묘한 색 차이까지 어마어마하게 많이 구별해 냅니다."}
+   e:"진짜예요. 세 종류의 색 감지 세포가 만드는 조합 덕분에, 우리는 미묘한 색 차이까지 어마어마하게 많이 구별해 냅니다."},
+  {claim:"인류를 가장 많이 죽인 동물은 사자나 상어가 아니라, 병을 옮기는 모기다.", real:true,
+   e:"진짜예요. 모기는 말라리아 같은 무서운 병을 옮겨, 역사 속에서 그 어떤 맹수보다 많은 사람의 목숨을 앗아 갔습니다."},
+  {claim:"하품을 왜 하는지는 과학이 아직 확실하게 설명하지 못한다.", real:true,
+   e:"진짜예요. 뇌를 식히기 위해서라는 설, 산소 때문이라는 설 등 여러 주장이 있지만, 딱 떨어지는 답은 아직 없습니다."},
+  {claim:"심장은 감정을 느끼고 생각을 하는 기관이다.", real:false,
+   e:"가짜! 감정과 생각은 모두 뇌가 해요. 심장은 그저 아주 성실한 펌프일 뿐이지만, 오랜 세월 사랑과 용기의 상징이 되어 왔습니다."},
+  {claim:"뇌를 다치면 성격이나 능력의 일부만 달라지고, 다른 부분은 멀쩡할 수 있다.", real:true,
+   e:"진짜예요. 뇌는 부위마다 맡은 일이 달라요. 그래서 특정 부위만 다치면 말은 못 하는데 노래는 부르는 것처럼, 놀라운 일이 벌어지기도 합니다."}
 ];
 
 /* 배지: 조건 함수로 판정 */
@@ -765,7 +866,20 @@ const BADGES = [
   {id:"number", em:"🔢", n:"숫자 마법사", cond:s=>!!s.numbersDone},
   {id:"detective", em:"🕵️", n:"진실 탐정", cond:s=>s.tfBest>=TF.length},
   {id:"writer", em:"✍️", n:"작가", cond:s=>s.reflText&&s.reflText.trim().length>0},
-  {id:"collector", em:"📖", n:"문장 수집가", cond:s=>(s.quotes||[]).length>=3}
+  {id:"collector", em:"📖", n:"문장 수집가", cond:s=>(s.quotes||[]).length>=3},
+  {id:"historian", em:"🔗", n:"의학사 박사", cond:s=>!!s.matchDone}
+];
+
+/* 의학사 인물 연결: 인물 ↔ 업적 */
+const MATCH = [
+  {p:"에드워드 제너", a:"최초의 백신(우두로 천연두 예방)"},
+  {p:"루이 파스퇴르", a:"저온살균법과 광견병 백신"},
+  {p:"조지프 리스터", a:"소독으로 감염을 막은 무균 수술"},
+  {p:"이그나즈 제멜바이스", a:"손 씻기로 산모의 죽음을 줄임"},
+  {p:"알렉산더 플레밍", a:"곰팡이에서 페니실린 발견"},
+  {p:"프레더릭 밴팅", a:"인슐린을 추출해 당뇨병 치료"},
+  {p:"크리스티안 바너드", a:"세계 최초의 심장 이식 수술"},
+  {p:"배리 마셜", a:"위궤양이 세균 탓임을 자가 실험으로 증명"}
 ];
 
 /* ============ STATE ============ */
@@ -786,6 +900,7 @@ S.quotes = S.quotes ?? [];
 S.quizBests = S.quizBests ?? {};
 S.quizPerfect = S.quizPerfect ?? false;
 S.expertAce = S.expertAce ?? false;
+S.matchDone = S.matchDone ?? false;
 
 /* ============ NAV ============ */
 function go(id){
@@ -797,6 +912,7 @@ function go(id){
   if(id==='word') buildWords();
   if(id==='numbers') buildNumbers();
   if(id==='tf') startTF();
+  if(id==='match') buildMatch();
   if(id==='cards') buildCards();
   if(id==='home') refreshHome();
 }
@@ -808,6 +924,7 @@ function refreshHome(){
   const wordN = S.wordSolved.length, wordDone = wordN>=WORDS.length;
   const numDone = !!S.numbersDone;
   const tfDone = S.tfBest>=TF.length;
+  const matchDone = !!S.matchDone;
   const cardsDone = (S.reflText && S.reflText.trim().length>0);
 
   setBar('p-quiz', quizDone?100:0);
@@ -815,6 +932,7 @@ function refreshHome(){
   setBar('p-word', wordN/WORDS.length*100);
   setBar('p-num', numDone?100:0);
   setBar('p-tf', S.tfBest/TF.length*100);
+  setBar('p-match', matchDone?100:0);
   setBar('p-cards', cardsDone?100:(S.flipped.length/FACTS.length*100));
 
   badge('b-quiz', quizDone?`최고 ${S.quizBest}점`:`${QUIZ.length}문항`, quizDone);
@@ -822,9 +940,10 @@ function refreshHome(){
   badge('b-word', wordDone?'완료!':`${wordN}/${WORDS.length}`, wordDone);
   badge('b-num', numDone?'계산함':'계산', numDone);
   badge('b-tf', tfDone?'완료!':(S.tfBest>0?`최고 ${S.tfBest}`:`${TF.length}주장`), tfDone);
+  badge('b-match', matchDone?'완료!':'연결', matchDone);
   badge('b-cards', cardsDone?'작성됨':'기록', cardsDone);
 
-  const flags=[quizDone,bodyDone,wordDone,numDone,tfDone,cardsDone];
+  const flags=[quizDone,bodyDone,wordDone,numDone,tfDone,matchDone,cardsDone];
   const done = flags.filter(Boolean).length;
   document.getElementById('homeFill').style.width = (done/flags.length*100)+'%';
   document.getElementById('homeLab').textContent =
@@ -1222,6 +1341,52 @@ function tfResult(){
       </div></div>`;
 }
 
+/* ============ MATCH (의학사 인물 연결) ============ */
+let matchSel=null, matchGot=0, matchMiss=0;
+function buildMatch(){
+  matchSel=null; matchGot=0; matchMiss=0;
+  document.getElementById('matchDoneBox').innerHTML='';
+  const left=shuffle(MATCH.map((m,i)=>({t:m.p,id:i})));
+  const right=shuffle(MATCH.map((m,i)=>({t:m.a,id:i})));
+  document.getElementById('matchLeft').innerHTML='<div class="matchcol-t">인물</div>'+left.map(x=>
+    `<div class="matchitem" data-side="L" data-id="${x.id}" onclick="pickMatch(this)">${x.t}</div>`).join('');
+  document.getElementById('matchRight').innerHTML='<div class="matchcol-t">업적</div>'+right.map(x=>
+    `<div class="matchitem" data-side="R" data-id="${x.id}" onclick="pickMatch(this)">${x.t}</div>`).join('');
+  updateMatchCount();
+}
+function pickMatch(el){
+  if(el.classList.contains('done')) return;
+  if(!matchSel){ el.classList.add('sel'); matchSel=el; return; }
+  if(matchSel===el){ el.classList.remove('sel'); matchSel=null; return; }
+  if(matchSel.dataset.side===el.dataset.side){ // 같은 쪽 → 선택 옮기기
+    matchSel.classList.remove('sel'); el.classList.add('sel'); matchSel=el; return;
+  }
+  if(matchSel.dataset.id===el.dataset.id){ // 정답 짝
+    matchSel.classList.remove('sel'); matchSel.classList.add('done'); el.classList.add('done');
+    matchSel=null; matchGot++; updateMatchCount();
+    if(matchGot===MATCH.length) finishMatch();
+  } else { // 오답
+    matchMiss++;
+    const a=matchSel, b=el; a.classList.add('wrong'); b.classList.add('wrong'); a.classList.remove('sel'); matchSel=null;
+    setTimeout(()=>{ a.classList.remove('wrong'); b.classList.remove('wrong'); },380);
+  }
+}
+function updateMatchCount(){ document.getElementById('matchCount').textContent=`${matchGot} / ${MATCH.length}`; }
+function finishMatch(){
+  S.matchDone=true; persist(); burst();
+  const perfect=matchMiss===0;
+  document.getElementById('matchDoneBox').innerHTML=`
+    <div class="matchresult">
+      <div class="rg">${perfect?'🏆':'🔗'}</div>
+      <div class="rt">${perfect?'완벽하게 연결했어요!':'모두 연결 완료!'}</div>
+      <div class="rs">${perfect?'한 번도 틀리지 않았어요.':`틀린 횟수 ${matchMiss}번`}</div>
+      <div class="row" style="display:flex;gap:10px;justify-content:center">
+        <button class="btn" onclick="go('home')">홈으로</button>
+        <button class="btn primary" onclick="buildMatch()">다시 섞기</button>
+      </div>
+    </div>`;
+}
+
 /* ============ RANDOM FACT ============ */
 let lastRF=-1;
 function randomFact(){
@@ -1280,7 +1445,7 @@ function burst(){
 document.getElementById('resetLink').onclick=()=>{
   if(confirm('모든 기록을 지우고 처음부터 시작할까요?')){
     localStorage.removeItem(KEY);
-    S={quizBest:null,foundOrgans:[],wordSolved:[],flipped:[],reflText:"",stars:0,tfBest:0,numbersDone:false,age:"",quotes:[],quizBests:{},quizPerfect:false,expertAce:false};
+    S={quizBest:null,foundOrgans:[],wordSolved:[],flipped:[],reflText:"",stars:0,tfBest:0,numbersDone:false,age:"",quotes:[],quizBests:{},quizPerfect:false,expertAce:false,matchDone:false};
     refreshHome(); toast('기록을 초기화했어요');
   }
 };
